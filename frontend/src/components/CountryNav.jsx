@@ -4,7 +4,9 @@ const CountryNav = () => {
   return (
     <nav className="navbar navbar-expand ">
       <div className="container-fluid">
-        <h6 className="navbar-brand fw-bold">РОССИЯ</h6>
+        <h6 style={{ fontSize: 30 }} className="navbar-brand fw-bold">
+          РОССИЯ
+        </h6>
         <ul className="navbar-nav align-items-center">
           <li>
             <h6 className="fw-bold">

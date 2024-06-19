@@ -4,10 +4,10 @@ import CityForm from "./CityForm";
 
 const CityCard = (props) => {
   return (
-    <div className="bg-body-tertiary rounded-4 overflow-hidden" style={{ width: 200 + "px" }}>
+    <div className="bg-body-tertiary rounded-4 overflow-hidden pb-2" style={{ width: 224 + "px" }}>
       <img
         src={require(`../imgs/${props.image}.png`)}
-        style={{ width: 200 + "px", height: 200 + "px" }}
+        style={{ width: 224 + "px", height: 224 + "px" }}
         alt="img"
       />
       <h6 className="fw-bold d-flex justify-content-center"> {props.name} </h6>
