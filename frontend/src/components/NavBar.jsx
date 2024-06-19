@@ -10,7 +10,7 @@ const Navbar = () => {
           </a>
           <ul className="navbar-nav align-items-center">
             <li className="nav-item">
-              <div className="badge text-bg-light text-wrap py-2 fs-5">1</div>
+              <div className="badge text-bg-light text-wrap py-2 fs-5">3</div>
             </li>
             <li className="nav-item">
               <a className="nav-link active fs-5 fw-bold">Раунд</a>
