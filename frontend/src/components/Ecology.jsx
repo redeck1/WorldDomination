@@ -18,7 +18,6 @@ const Ecology = () => {
             className="form-check-input"
             id="eco"
             disabled={balance - 150 < 0 && !clicked}
-            checked={clicked}
             onChange={(e) => dispatch(changeEco(e.target.checked))}
           ></input>
           <label className="form-check-label text-center" htmlFor="eco">

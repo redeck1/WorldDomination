@@ -76,10 +76,20 @@ const ownCountrySlice = createSlice({
         state.changes = state.changes.filter((item) => item.name !== "Развитие ядерной технологии");
       }
     },
+    changeSanction(state, action) {
+      const { to, send } = action.payload;
+      if (send) {
+        state.changes.push({ type: "sanction", to: to });
+      } else {
+        state.changes = state.changes.filter(
+          (item) => !(item.type === "sanction" && item.to === to)
+        );
+      }
+    },
   },
 });
 
-export const { changeEco, changeTech } = ownCountrySlice.actions;
+export const { changeEco, changeTech, changeSanction } = ownCountrySlice.actions;
 
 export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");
 export const selectExpense = (state) =>

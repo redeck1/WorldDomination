@@ -18,7 +18,6 @@ const NuclerTech = () => {
             className="form-check-input"
             id="tech"
             disabled={balance - 500 < 0 && !clicked}
-            checked={clicked}
             onChange={(e) => dispatch(changeTech(e.target.checked))}
           ></input>
           <label className="form-check-label text-center" htmlFor="tech">
