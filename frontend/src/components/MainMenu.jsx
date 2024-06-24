@@ -12,7 +12,7 @@ const MainMenu = () => {
   const ownCountry = useSelector((state) => state.ownCountry);
 
   return (
-    <div className="container py-2 mt-4 bg-body-secondary rounded-3 ">
+    <div className="container py-2 mt-4 bg-body-secondary rounded-3">
       <CountryNav country={ownCountry} />
       <CityGroup cities={ownCountry.cities} />
 
@@ -34,6 +34,11 @@ const MainMenu = () => {
             <Decrees cities={ownCountry.cities} />
           </div>
         </div>
+      </div>
+      <div className="justify-content-center d-flex mt-3">
+        <button type="button" className="btn btn-outline-primary btn-lg fw-bold">
+          Закончить ход
+        </button>
       </div>
     </div>
   );

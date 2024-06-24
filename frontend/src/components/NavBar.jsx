@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const round = useSelector((state) => state.ownCountry.round);
+
   return (
     <nav className="navbar navbar-dark navbar-expand bg-primary py-0">
       <div className="container-fluid">
@@ -10,7 +13,7 @@ const Navbar = () => {
           </a>
           <ul className="navbar-nav align-items-center">
             <li className="nav-item">
-              <div className="badge text-bg-light text-wrap py-2 fs-5">3</div>
+              <div className="badge text-bg-light text-wrap py-2 fs-5">{round}</div>
             </li>
             <li className="nav-item">
               <a className="nav-link active fs-5 fw-bold">Раунд</a>

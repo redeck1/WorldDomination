@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  round: 1,
   name: "Россия",
   mean: 57,
-  balance: 500,
+  balance: 1000,
+  bombs: 0,
   isHaveNuclearTech: false,
   nuclearTech: false, // развивать ли ядерную технологию
   ecology: false,
-  expenses: [],
+  changes: [],
   cities: [
     {
       name: "Москва",
@@ -55,28 +57,32 @@ const ownCountrySlice = createSlice({
     changeEco(state, action) {
       state.ecology = action.payload;
       if (action.payload) {
-        state.expenses.push({ name: "Улучшение экологии", cost: 150 });
+        state.changes.push({ type: "expense", name: "Улучшение экологии", cost: 150 });
+        state.changes.push({ type: "eco", name: "Улучшение экологии", cost: +10 });
         state.balance -= 150;
       } else {
+        state.changes = state.changes.filter((item) => item.name !== "Улучшение экологии");
         state.balance += 150;
-        state.expenses = state.expenses.filter((item) => item.name !== "Улучшение экологии");
       }
     },
     changeTech(state, action) {
       state.nuclearTech = action.payload;
       if (action.payload) {
-        state.expenses.push({ name: "Развитие ядерной технологии", cost: 500 });
+        state.changes.push({ type: "expense", name: "Развитие ядерной технологии", cost: 500 });
+        state.changes.push({ type: "eco", name: "Развитие ядерной технологии", cost: -3 });
         state.balance -= 500;
       } else {
         state.balance += 500;
-        state.expenses = state.expenses.filter(
-          (item) => item.name !== "Развитие ядерной технологии"
-        );
+        state.changes = state.changes.filter((item) => item.name !== "Развитие ядерной технологии");
       }
     },
   },
 });
 
 export const { changeEco, changeTech } = ownCountrySlice.actions;
+
+export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");
+export const selectExpense = (state) =>
+  state.ownCountry.changes.filter((item) => item.type === "expense");
 
 export default ownCountrySlice.reducer;
