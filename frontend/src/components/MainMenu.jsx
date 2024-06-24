@@ -6,12 +6,15 @@ import Sanc from "../components/Sanc";
 import Transfer from "../components/Transfer";
 import Decrees from "../components/Decrees";
 import CityGroup from "../components/CityGroup";
+import { useSelector } from "react-redux";
 
 const MainMenu = () => {
+  const ownCountry = useSelector((state) => state.ownCountry);
+
   return (
     <div className="container py-2 mt-4 bg-body-secondary rounded-3 ">
-      <CountryNav />
-      <CityGroup />
+      <CountryNav country={ownCountry} />
+      <CityGroup cities={ownCountry.cities} />
 
       <div className="container">
         <div className="row">
@@ -28,7 +31,7 @@ const MainMenu = () => {
           </div>
           <div className="col-6 pe-0">
             <Transfer />
-            <Decrees />
+            <Decrees cities={ownCountry.cities} />
           </div>
         </div>
       </div>

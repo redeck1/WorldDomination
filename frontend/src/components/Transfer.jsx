@@ -1,8 +1,9 @@
 import React from "react";
-import { countries } from "../Data";
 import PanelHeader from "./PanelHeader";
+import { useSelector } from "react-redux";
 
 const Transfer = () => {
+  const countries = useSelector((state) => state.countries);
   return (
     <div className="container py-3 mt-4 bg-body-tertiary rounded-4 ">
       <PanelHeader>перевести деньги</PanelHeader>

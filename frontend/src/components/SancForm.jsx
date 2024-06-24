@@ -1,7 +1,8 @@
 import React from "react";
-import { countries } from "../Data";
+import { useSelector } from "react-redux";
 
 const SancForm = () => {
+  const countries = useSelector((state) => state.countries);
   return (
     <>
       {countries.map((country) => (
