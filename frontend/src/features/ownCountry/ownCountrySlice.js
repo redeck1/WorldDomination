@@ -2,11 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   round: 1,
+  ecologyLvl: 90,
   name: "Россия",
   mean: 57,
   balance: 1000,
   bombs: 1,
-  isHaveNuclearTech: false,
+  isHaveNuclearTech: true,
   nuclearTech: false, // развивать ли ядерную технологию
   ecology: false,
   sanctionsFrom: [],
@@ -60,7 +61,7 @@ const ownCountrySlice = createSlice({
       if (action.payload) {
         state.changes.push(
           { type: "expense", name: "Улучшение экологии", cost: 150 },
-          { type: "eco", name: "Улучшение экологии", cost: +10 }
+          { type: "eco", name: "Улучшение экологии", cost: 20 }
         );
         state.balance -= 150;
       } else {
@@ -112,9 +113,14 @@ const ownCountrySlice = createSlice({
       const { count, waste } = action.payload;
       if (count !== 0) {
         state.balance = state.balance + waste - count * 150;
-        const index = state.changes.findIndex((item) => item.name === "Строительство бомб");
+        const index = state.changes.findIndex(
+          (item) => item.type === "expense" && item.name === "Строительство бомб"
+        );
         if (index === -1) {
-          state.changes.push({ type: "expense", name: "Строительство бомб", cost: count * 150 });
+          state.changes.push(
+            { type: "expense", name: "Строительство бомб", cost: count * 150 },
+            { type: "eco", name: "Строительство бомб", cost: -0.6 }
+          );
         } else {
           state.changes[index].cost = count * 150;
         }
@@ -127,10 +133,15 @@ const ownCountrySlice = createSlice({
       const { name, bool } = action.payload;
       if (bool) {
         state.bombs -= 1;
-        state.changes.push({ type: "atack", name: name });
+        state.changes.push(
+          { type: "atack", name: name },
+          { type: "eco", name: "Ядерная бомбордировка", cost: -10 }
+        );
       } else {
         state.bombs += 1;
-        state.changes = state.changes.filter((item) => item.name !== name);
+        state.changes = state.changes.filter(
+          (item) => item.name !== name && item.name !== "Ядерная бомбордировка"
+        );
       }
     },
   },

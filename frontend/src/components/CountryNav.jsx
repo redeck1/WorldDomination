@@ -9,20 +9,23 @@ const CountryNav = ({ country }) => {
         </h1>
         <ul className="navbar-nav align-items-center">
           <li>
-            <h6 className="fw-bold">
+            <h6 className="fw-bold text-primary">
               Средний уровень <br /> жизни в стране
             </h6>
           </li>
-          <li className="ms-3">
+          <li className="ms-3 text-primary">
             <h6 className="fs-1">{country.mean}%</h6>
           </li>
           <li className="ms-5">
-            <h6 className="fw-bold">
+            <h6 className="fw-bold text-primary">
               Доступный <br /> бюджет
             </h6>
           </li>
-          <li className="ms-3 ">
-            <h6 className="fs-1 d-flex justify-content-end" style={{ width: 70 + "px" }}>
+          <li className="ms-3">
+            <h6
+              className="fs-1 d-flex justify-content-end text-primary"
+              style={{ width: 70 + "px" }}
+            >
               {country.balance}
             </h6>
           </li>
