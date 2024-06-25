@@ -1,6 +1,11 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeBombing } from "../features/ownCountry/ownCountrySlice";
 
 const SideTable = ({ country }) => {
+  const dispatch = useDispatch();
+  const bombs = useSelector((state) => state.ownCountry.bombs);
+
   const renderCity = (city) => {
     if (city.isAlive) {
       return (
@@ -9,7 +14,11 @@ const SideTable = ({ country }) => {
             type="checkbox"
             className="form-check-input"
             id={country.name + "-" + city.name}
-          ></input>
+            disabled={
+              bombs - 1 < 0 && !document.getElementById(country.name + "-" + city.name).checked
+            }
+            onChange={(e) => dispatch(changeBombing({ name: e.target.id, bool: e.target.checked }))}
+          />
           <label htmlFor={country.name + "-" + city.name}>Бомбить</label>
         </div>
       );

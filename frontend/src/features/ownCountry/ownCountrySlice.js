@@ -5,10 +5,11 @@ const initialState = {
   name: "Россия",
   mean: 57,
   balance: 1000,
-  bombs: 0,
+  bombs: 1,
   isHaveNuclearTech: false,
   nuclearTech: false, // развивать ли ядерную технологию
   ecology: false,
+  sanctionsFrom: [],
   changes: [],
   cities: [
     {
@@ -57,8 +58,10 @@ const ownCountrySlice = createSlice({
     changeEco(state, action) {
       state.ecology = action.payload;
       if (action.payload) {
-        state.changes.push({ type: "expense", name: "Улучшение экологии", cost: 150 });
-        state.changes.push({ type: "eco", name: "Улучшение экологии", cost: +10 });
+        state.changes.push(
+          { type: "expense", name: "Улучшение экологии", cost: 150 },
+          { type: "eco", name: "Улучшение экологии", cost: +10 }
+        );
         state.balance -= 150;
       } else {
         state.changes = state.changes.filter((item) => item.name !== "Улучшение экологии");
@@ -68,8 +71,10 @@ const ownCountrySlice = createSlice({
     changeTech(state, action) {
       state.nuclearTech = action.payload;
       if (action.payload) {
-        state.changes.push({ type: "expense", name: "Развитие ядерной технологии", cost: 500 });
-        state.changes.push({ type: "eco", name: "Развитие ядерной технологии", cost: -3 });
+        state.changes.push(
+          { type: "expense", name: "Развитие ядерной технологии", cost: 500 },
+          { type: "eco", name: "Развитие ядерной технологии", cost: -3 }
+        );
         state.balance -= 500;
       } else {
         state.balance += 500;
@@ -86,13 +91,56 @@ const ownCountrySlice = createSlice({
         );
       }
     },
+    changeCity(state, action) {
+      const { name, type, bool } = action.payload;
+      if (bool) {
+        state.changes.push({
+          type: `expense/${type}`,
+          name: type === "upgrade" ? `Улучшение ${name}` : `Щит для ${name}`,
+          for: name,
+          cost: type === "upgrade" ? 150 : 300,
+        });
+        state.balance -= type === "upgrade" ? 150 : 300;
+      } else {
+        state.balance += type === "upgrade" ? 150 : 300;
+        state.changes = state.changes.filter(
+          (item) => !(item.type === "expense/" + type && item.for === name)
+        );
+      }
+    },
+    buildBombs(state, action) {
+      const { count, waste } = action.payload;
+      if (count !== 0) {
+        state.balance = state.balance + waste - count * 150;
+        const index = state.changes.findIndex((item) => item.name === "Строительство бомб");
+        if (index === -1) {
+          state.changes.push({ type: "expense", name: "Строительство бомб", cost: count * 150 });
+        } else {
+          state.changes[index].cost = count * 150;
+        }
+      } else {
+        state.balance += waste;
+        state.changes = state.changes.filter((item) => item.name !== "Строительство бомб");
+      }
+    },
+    changeBombing(state, action) {
+      const { name, bool } = action.payload;
+      if (bool) {
+        state.bombs -= 1;
+        state.changes.push({ type: "atack", name: name });
+      } else {
+        state.bombs += 1;
+        state.changes = state.changes.filter((item) => item.name !== name);
+      }
+    },
   },
 });
 
-export const { changeEco, changeTech, changeSanction } = ownCountrySlice.actions;
+export const { changeEco, changeTech, changeSanction, changeCity, buildBombs, changeBombing } =
+  ownCountrySlice.actions;
 
 export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");
 export const selectExpense = (state) =>
-  state.ownCountry.changes.filter((item) => item.type === "expense");
+  state.ownCountry.changes.filter((item) => item.type.includes("expense")); // переписать функцию так чтобы выводила общую информацию по улучшению городов
 
 export default ownCountrySlice.reducer;

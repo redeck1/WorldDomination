@@ -1,6 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const SancInfo = () => {
+  const sanctions = useSelector((state) => state.ownCountry.sanctionsFrom);
+
+  if (sanctions.length !== 0) {
+    return <p>На вас наложили санкции: {sanctions.join(", ")}</p>;
+  }
   return <p>Ни одна из стран не наложила на вас санкции</p>;
 };
 
