@@ -5,6 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 const CityForm = ({ name }) => {
   const dispatch = useDispatch();
   const balance = useSelector((state) => state.ownCountry.balance);
+  const upgradeClicked = useSelector((state) =>
+    state.ownCountry.changes.find((item) => item.name === `Улучшение ${name}`)
+  );
+  const shieldClicked = useSelector((state) =>
+    state.ownCountry.changes.find((item) => item.name === `Щит для ${name}`)
+  );
 
   return (
     <form className="px-3">
@@ -12,13 +18,14 @@ const CityForm = ({ name }) => {
         <input
           type="checkbox"
           className="form-check-input"
-          id={`upgrade${name}`}
-          disabled={balance - 150 < 0 && !document.getElementById(`upgrade${name}`).checked}
+          id={`Улучшение ${name}`}
+          checked={upgradeClicked ? true : false}
+          disabled={balance - 150 < 0 && !upgradeClicked}
           onChange={(e) =>
-            dispatch(changeCity({ name: name, type: "upgrade", bool: e.target.checked }))
+            dispatch(changeCity({ name: name, type: "Улучшение", bool: e.target.checked }))
           }
         ></input>
-        <label className="form-check-label text-center" htmlFor={`upgrade${name}`}>
+        <label className="form-check-label text-center" htmlFor={`Улучшение ${name}`}>
           Развить город <span className="opacity-50">(150$)</span>
         </label>
       </div>
@@ -26,13 +33,14 @@ const CityForm = ({ name }) => {
         <input
           type="checkbox"
           className="form-check-input"
-          id={`buildShield${name}`}
-          disabled={balance - 300 < 0 && !document.getElementById(`buildShield${name}`).checked}
+          id={`Щит для ${name}`}
+          checked={shieldClicked ? true : false}
+          disabled={balance - 300 < 0 && !shieldClicked}
           onChange={(e) =>
-            dispatch(changeCity({ name: name, type: "shield", bool: e.target.checked }))
+            dispatch(changeCity({ name: name, type: "Щит для", bool: e.target.checked }))
           }
         ></input>
-        <label className="form-check-label text-center" htmlFor={`buildShield${name}`}>
+        <label className="form-check-label text-center" htmlFor={`Щит для ${name}`}>
           Построить щит <span className="opacity-50">(300$)</span>
         </label>
       </div>

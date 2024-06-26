@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PanelHeader from "./PanelHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { changeEco } from "../features/ownCountry/ownCountrySlice";
@@ -17,6 +17,7 @@ const Ecology = () => {
             type="checkbox"
             className="form-check-input"
             id="eco"
+            checked={clicked}
             disabled={balance - 150 < 0 && !clicked}
             onChange={(e) => dispatch(changeEco(e.target.checked))}
           ></input>

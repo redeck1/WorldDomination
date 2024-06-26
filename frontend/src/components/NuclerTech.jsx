@@ -5,10 +5,15 @@ import { buildBombs, changeTech } from "../features/ownCountry/ownCountrySlice";
 
 let NuclerTech = () => {
   const dispatch = useDispatch();
-  const clicked = useSelector((state) => state.ownCountry.nuclearTech);
+  const buildTechClicked = useSelector((state) => state.ownCountry.nuclearTech);
   const balance = useSelector((state) => state.ownCountry.balance);
   const isHaveNuclearTech = useSelector((state) => state.ownCountry.isHaveNuclearTech);
   const bombs = useSelector((state) => state.ownCountry.bombs);
+  let bombsToBuild = useSelector((state) =>
+    state.ownCountry.changes.find((item) => item.name === "Строительство бомб")
+  );
+  bombsToBuild = bombsToBuild ? bombsToBuild.count : 0;
+
   const [waste, setWaste] = useState(0);
 
   const onClickHandler = (e) => {
@@ -32,7 +37,7 @@ let NuclerTech = () => {
               name="buildBombs"
               id="0bomb"
               defaultChecked={true}
-              onClick={(e) => onClickHandler(e)}
+              onChange={(e) => onClickHandler(e)}
             />
             <label className="form-check-label" htmlFor="0bomb">
               0
@@ -44,8 +49,9 @@ let NuclerTech = () => {
               type="radio"
               name="buildBombs"
               id="1bomb"
-              disabled={balance + waste - 150 < 0 && !document.getElementById("1bomb").checked}
-              onClick={(e) => onClickHandler(e)}
+              checked={bombsToBuild === 1}
+              disabled={balance + waste - 150 < 0 && bombsToBuild !== 1}
+              onChange={(e) => onClickHandler(e)}
             />
             <label className="form-check-label" htmlFor="1bomb">
               1 <span className="opacity-50">(150$)</span>
@@ -57,8 +63,9 @@ let NuclerTech = () => {
               type="radio"
               name="buildBombs"
               id="2bomb"
-              disabled={balance - 300 < 0 && !document.getElementById("2bomb").checked}
-              onClick={(e) => onClickHandler(e)}
+              checked={bombsToBuild === 2}
+              disabled={balance - 300 < 0 && bombsToBuild !== 2}
+              onChange={(e) => onClickHandler(e)}
             />
             <label className="form-check-label" htmlFor="2bomb">
               2 <span className="opacity-50">(300$)</span>
@@ -74,7 +81,8 @@ let NuclerTech = () => {
           type="checkbox"
           className="form-check-input"
           id="tech"
-          disabled={balance - 500 < 0 && !clicked}
+          checked={buildTechClicked}
+          disabled={balance - 500 < 0 && !buildTechClicked}
           onChange={(e) => dispatch(changeTech(e.target.checked))}
         ></input>
         <label className="form-check-label text-center" htmlFor="tech">

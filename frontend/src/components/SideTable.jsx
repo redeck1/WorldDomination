@@ -5,21 +5,26 @@ import { changeBombing } from "../features/ownCountry/ownCountrySlice";
 const SideTable = ({ country }) => {
   const dispatch = useDispatch();
   const bombs = useSelector((state) => state.ownCountry.bombs);
+  const atackedCities = useSelector((state) =>
+    state.ownCountry.changes.filter((item) => item.type === "atack")
+  );
 
   const renderCity = (city) => {
     if (city.isAlive) {
+      const clicked = atackedCities.find((item) => item.name === `${country.name}-${city.name}`)
+        ? true
+        : false;
       return (
         <div className="form-check" key={country.name}>
           <input
             type="checkbox"
             className="form-check-input"
-            id={country.name + "-" + city.name}
-            disabled={
-              bombs - 1 < 0 && !document.getElementById(country.name + "-" + city.name).checked
-            }
+            id={`${country.name}-${city.name}`}
+            checked={clicked}
+            disabled={bombs - 1 < 0 && !clicked}
             onChange={(e) => dispatch(changeBombing({ name: e.target.id, bool: e.target.checked }))}
           />
-          <label htmlFor={country.name + "-" + city.name}>Бомбить</label>
+          <label htmlFor={`${country.name}-${city.name}`}>Бомбить</label>
         </div>
       );
     }
