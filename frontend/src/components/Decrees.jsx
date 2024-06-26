@@ -3,9 +3,10 @@ import PanelHeader from "./PanelHeader";
 import { useSelector } from "react-redux";
 import { selectEco, selectExpense } from "../features/ownCountry/ownCountrySlice";
 
-const Decrees = ({ cities }) => {
+const Decrees = () => {
   const expenses = useSelector(selectExpense);
   const ecologyChanges = useSelector(selectEco);
+  const cities = useSelector((state) => state.ownCountry.cities);
 
   let outcome = 0;
   expenses.map((expense) => (outcome += expense.cost));

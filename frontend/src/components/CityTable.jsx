@@ -1,21 +1,21 @@
 import React from "react";
 
-const CityTable = (props) => {
+const CityTable = (city) => {
   return (
     <div className="px-3">
       <table className="table table-light">
         <tbody>
           <tr>
             <th>Развитие</th>
-            <td>{props.growth}%</td>
+            <td>{city.growth}%</td>
           </tr>
           <tr>
             <th>Ур. жизни</th>
-            <td>{props.liveLVL}%</td>
+            <td>{city.liveLVL}%</td>
           </tr>
           <tr>
             <th>Доход</th>
-            <td>{props.profit}$</td>
+            <td>{city.profit}$</td>
           </tr>
         </tbody>
       </table>

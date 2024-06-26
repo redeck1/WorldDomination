@@ -2,7 +2,7 @@ import React from "react";
 import CityTable from "./CityTable";
 import CityForm from "./CityForm";
 
-const CityCard = (city) => {
+let CityCard = (city) => {
   return (
     <div className="bg-body-tertiary rounded-4 overflow-hidden pb-2" style={{ width: 224 + "px" }}>
       <img
@@ -16,5 +16,7 @@ const CityCard = (city) => {
     </div>
   );
 };
+
+CityCard = React.memo(CityCard);
 
 export default CityCard;

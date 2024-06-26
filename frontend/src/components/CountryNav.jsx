@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const CountryNav = ({ country }) => {
+const CountryNav = () => {
+  const country = useSelector((state) => state.ownCountry);
+
   return (
     <nav className="navbar navbar-expand ">
       <div className="container-fluid">

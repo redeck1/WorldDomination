@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const round = useSelector((state) => state.ownCountry.round);
@@ -21,12 +22,12 @@ const Navbar = () => {
           </ul>
         </div>
         <div>
-          <a href="home" className="btn btn-primary">
+          <Link to="/home" className="btn btn-primary">
             Страна
-          </a>
-          <a href="statistics" className="btn btn-primary">
+          </Link>
+          <Link to="/statistics" className="btn btn-primary">
             Общая статистика
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

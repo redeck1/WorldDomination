@@ -3,7 +3,7 @@ import PanelHeader from "./PanelHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { buildBombs, changeTech } from "../features/ownCountry/ownCountrySlice";
 
-const NuclerTech = () => {
+let NuclerTech = () => {
   const dispatch = useDispatch();
   const clicked = useSelector((state) => state.ownCountry.nuclearTech);
   const balance = useSelector((state) => state.ownCountry.balance);
@@ -91,5 +91,7 @@ const NuclerTech = () => {
     </div>
   );
 };
+
+NuclerTech = React.memo(NuclerTech);
 
 export default NuclerTech;
