@@ -28,6 +28,9 @@ const Navbar = () => {
           <Link to="/statistics" className="btn btn-primary">
             Общая статистика
           </Link>
+          <Link to="/" className="btn btn-primary">
+            Выйти
+          </Link>
         </div>
       </div>
     </nav>

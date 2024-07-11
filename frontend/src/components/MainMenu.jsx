@@ -6,8 +6,17 @@ import Sanc from "../components/Sanc";
 import Transfer from "../components/Transfer";
 import Decrees from "../components/Decrees";
 import CityGroup from "../components/CityGroup";
+import { useSelector } from "react-redux";
 
 const MainMenu = () => {
+  const countryName = useSelector((state) => state.ownCountry.name);
+  const changes = useSelector((state) => state.ownCountry.changes);
+
+  const endStep = (event) => {
+    event.preventDefault();
+    console.log({ countryName: countryName, changes: changes });
+  };
+
   return (
     <div className="container py-2 mt-4 bg-body-secondary rounded-3">
       <CountryNav />
@@ -33,7 +42,11 @@ const MainMenu = () => {
         </div>
       </div>
       <div className="justify-content-center d-flex mt-3">
-        <button type="button" className="btn btn-outline-primary btn-lg fw-bold">
+        <button
+          type="button"
+          className="btn btn-outline-primary btn-lg fw-bold"
+          onClick={(e) => endStep(e)}
+        >
           Закончить ход
         </button>
       </div>

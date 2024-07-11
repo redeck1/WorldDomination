@@ -7,10 +7,13 @@ const Ecology = () => {
   const dispatch = useDispatch();
   const clicked = useSelector((state) => state.ownCountry.ecology);
   const balance = useSelector((state) => state.ownCountry.balance);
+  const ecoLvl = useSelector((state) => state.ownCountry.ecologyLvl);
 
   return (
     <div className="bg-body-tertiary rounded-4 p-3 mt-3">
-      <PanelHeader>Экология</PanelHeader>
+      <PanelHeader>
+        Экология <span className="opacity-50">({ecoLvl}%)</span>
+      </PanelHeader>
       <form>
         <div className="mb-2 form-check">
           <input
