@@ -2,6 +2,7 @@ import React from "react";
 import EcologyGraph from "../components/EcologyGraph";
 import CoutryGraph from "../components/CoutryGraph";
 import { useSelector } from "react-redux";
+import AllCountriesGraph from "../components/AllCountriesGraph";
 
 const colors = [
   "#59D5E0",
@@ -19,7 +20,7 @@ const Statistics = () => {
 
   return (
     <>
-      <div class="row row-cols-4">
+      <div class="row row-cols-4 mt-4">
         {countries.map((country, index) => (
           <div className="col">
             <h3 className="ps-5">
@@ -29,8 +30,17 @@ const Statistics = () => {
           </div>
         ))}
       </div>
+      <div className="row">
+        <div className="col">
+          <h3 className="ps-5">Экология</h3>
+          <EcologyGraph />
+        </div>
 
-      <EcologyGraph />
+        <div className="col">
+          <h3 className="ps-5">Средний уровень развития стран</h3>
+          <AllCountriesGraph data={countries} />
+        </div>
+      </div>
     </>
   );
 };

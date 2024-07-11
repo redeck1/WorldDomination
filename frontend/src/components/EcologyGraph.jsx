@@ -1,4 +1,4 @@
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, Tooltip } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 const data = [
   { round: 1, lvl: 90, amt: 2400 },
   { round: 2, lvl: 70, amt: 2400 },
@@ -23,8 +23,8 @@ const EcologyGraph = () => {
 
   return (
     <LineChart
-      width={1000}
-      height={300}
+      width={900}
+      height={400}
       data={data}
       margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
     >
@@ -33,7 +33,6 @@ const EcologyGraph = () => {
       <XAxis dataKey="round" />
       <YAxis />
       <Tooltip content={<CustomTooltip />} />
-      <Legend />
     </LineChart>
   );
 };
