@@ -6,16 +6,13 @@ import Sanc from "../components/Sanc";
 import Transfer from "../components/Transfer";
 import Decrees from "../components/Decrees";
 import CityGroup from "../components/CityGroup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { endStep } from "../features/ownCountry/ownCountrySlice";
 
 const MainMenu = () => {
   const countryName = useSelector((state) => state.ownCountry.name);
   const changes = useSelector((state) => state.ownCountry.changes);
-
-  const endStep = (event) => {
-    event.preventDefault();
-    console.log({ countryName: countryName, changes: changes });
-  };
+  const dispatch = useDispatch();
 
   return (
     <div className="container py-2 mt-4 bg-body-secondary rounded-3">
@@ -45,7 +42,7 @@ const MainMenu = () => {
         <button
           type="button"
           className="btn btn-outline-primary btn-lg fw-bold"
-          onClick={(e) => endStep(e)}
+          onClick={() => dispatch(endStep({ name: countryName, changes: changes }))}
         >
           Закончить ход
         </button>

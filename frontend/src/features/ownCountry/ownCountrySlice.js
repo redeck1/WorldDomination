@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   round: 1,
@@ -51,6 +51,8 @@ const initialState = {
     },
   ],
 };
+
+// const endStep = createAsyncThunk()
 
 const ownCountrySlice = createSlice({
   name: "ownCountry",
@@ -144,11 +146,21 @@ const ownCountrySlice = createSlice({
         );
       }
     },
+    endStep(state, action) {
+      console.log(action.payload);
+    },
   },
 });
 
-export const { changeEco, changeTech, changeSanction, changeCity, buildBombs, changeBombing } =
-  ownCountrySlice.actions;
+export const {
+  changeEco,
+  changeTech,
+  changeSanction,
+  changeCity,
+  buildBombs,
+  changeBombing,
+  endStep,
+} = ownCountrySlice.actions;
 
 export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");
 export const selectExpense = (state) =>
