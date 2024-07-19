@@ -1,0 +1,49 @@
+{
+    "name": "USA",
+    "pay_money": 1000,
+    "ecology": -100,
+    "nuclear_tech_develop": 1,
+    "create_bombs": 0,
+    "cities": {
+        "USA_City_1": {
+            "city_develop": 1,
+            "city_shield": 1
+        },
+        "_USA_City_2": {
+            "city_develop": 1,
+            "city_shield": 1
+        },
+        "_USA_City_3": {
+            "city_develop": 0,
+            "city_shield": 1
+        }
+    },
+    "sanctions": {
+        "USA": 0,
+        "Russia": 1,
+        "Turkey": 1
+    },
+    "money_transfer": {
+        "USA": 0,
+        "Russia": 100,
+        "Turkey": 150
+    },
+    "bombs": {
+        "USA": {
+            "USA_City_1": 0,
+            "USA_City_2": 0,
+            "USA_City_3": 0
+        },
+        "Russia": {
+            "Russian_City_1": 1,
+            "Russian_City_2": 0,
+            "Russian_City_3": 0
+        },
+        "Turkey": {
+            "Turkey_City_1": 1,
+            "Turkey_City_2": 0,
+            "Turkey_City_3": 1
+        }
+    }
+
+}
