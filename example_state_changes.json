@@ -1,7 +1,8 @@
 {
+    "round": 1,
     "name": "США",
     "spent_money": 1000,
-    "ecology": -100,
+    "ecologylvl": -100,
     "nuclear_tech_develop": 1,
     "created_bombs": 0,
     "cities": {
