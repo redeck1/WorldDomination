@@ -1,9 +1,9 @@
 {
     "round": 1,
+    "ecologylvl": 90,
     "countries": {
         "Russia": {
             "country_name": "Россия",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -51,7 +51,6 @@
         },
         "USA": {
             "country_name": "США",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -99,7 +98,6 @@
         },
         "North_Korea": {
             "country_name": "Сев. Корея",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -147,7 +145,6 @@
         },
         "Iraq": {
             "country_name": "Ирак",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -195,7 +192,6 @@
         },
         "Greece": {
             "country_name": "Греция",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -243,7 +239,6 @@
         },
         "China": {
             "country_name": "Китай",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -291,7 +286,6 @@
         },
         "France": {
             "country_name": "Франция",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
@@ -339,7 +333,6 @@
         },
         "Germany": {
             "country_name": "Германия",
-            "ecologylvl": 90,
             "mean": 57,
             "balance": 1000,
             "bombs": 0,
