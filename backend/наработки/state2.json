@@ -1,0 +1,9 @@
+{
+   "name": "USA",
+   "pay_money": 800,
+   "shields": [
+      "U_City1",
+      "U_City3"
+   ],
+   "ecology": 10
+}

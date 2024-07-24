@@ -8,8 +8,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Moscow": {
@@ -55,8 +53,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Washington": {
@@ -102,8 +98,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Phenyan": {
@@ -149,8 +143,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Bagdad": {
@@ -196,8 +188,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Afini": {
@@ -243,8 +233,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Pekin": {
@@ -290,8 +278,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Paris": {
@@ -337,8 +323,6 @@
             "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
-            "?????nuclearTech?????": false,
-            "ecology": false,
             "sanctionsFrom": [],
             "cities": {
                 "Berlin": {
