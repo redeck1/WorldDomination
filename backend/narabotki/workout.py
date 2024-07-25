@@ -52,7 +52,7 @@ user = input('Выберите страну (Russia, USA, Turkey): ')
 with open('state.json') as state:
     data = json.load(state)
 
-
+print(data)
 
 def ShowAll():
     print(data)

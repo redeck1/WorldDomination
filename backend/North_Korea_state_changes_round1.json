@@ -1,36 +1,30 @@
 {
     "round": 1,
-    "name": "США",
+    "name": "Сев. Корея",
     "spent_money": 1000,
     "ecologylvl": -100,
     "nuclear_tech_develop": 1,
     "created_bombs": 0,
     "cities": {
-        "Washington": {
+        "Phenyan": {
             "city_develop": 1,
             "city_shield": 1
         },
-        "New-York": {
+        "Hamhin": {
             "city_develop": 1,
             "city_shield": 1
         },
-        "Memphis": {
+        "Chongin": {
             "city_develop": 0,
             "city_shield": 1
         },
-        "Miami": {
+        "Nampho": {
             "city_develop": 0,
             "city_shield": 1
         }
     },
-    "sanctions": {
-        "Russia": 1,
-        "North_Korea": 1,
-        "Greece": 1,
-        "China": 1,
-        "France": 1,
-        "Germany": 1
-    },
+    "sanctions": ["Russia","Greece","China","France","Germany"],
+    
     "money_transfer": {
         "Russia": 100,
         "North_Korea": 150,
