@@ -1,0 +1,52 @@
+{
+    "round": 1,
+    "name": "Франция",
+    "spent_money": 1000,
+    "ecologylvl": -100,
+    "nuclear_tech_develop": 1,
+    "created_bombs": 0,
+    "cities": {
+        "Paris": {
+            "city_develop": 1,
+            "city_shield": 1
+        },
+        "Marsel": {
+            "city_develop": 1,
+            "city_shield": 1
+        },
+        "Lion": {
+            "city_develop": 0,
+            "city_shield": 1
+        },
+        "Nicca": {
+            "city_develop": 0,
+            "city_shield": 1
+        }
+    },
+    "sanctions": ["Greece","China","Germany"],
+    
+    "money_transfer": {
+        "Russia": 100,
+        "North_Korea": 150,
+        "China": 200,
+        "Germany": 160
+    },
+    "bombs": {
+        "Russia": {"Moscow": 0,"Sanct-Peterburg": 0,"Novosib": 0, "Vladivostok": 0},
+
+        "USA": {"Washington": 0,"New-York": 0,"Memphis": 0, "Miami": 0},
+
+        "North_Korea": {"Phenyan": 0,"Hamhin": 0,"Chongin": 0, "Nampho": 0},
+
+        "Iraq": {"Bagdad": 0,"Mosul": 0,"Erbil": 0, "Basra": 0},
+
+        "Greece": {"Afini": 0,"Saloniki": 0,"Patri": 0, "Larisa": 0},
+
+        "China": {"Pekin": 0,"Shanhai": 0,"Chuncin": 0, "Guanchgou": 0},
+
+        "France": {"Paris": 0,"Marsel": 0,"Lion": 0, "Nicca": 0},
+        
+        "Germany": {"Berlin": 0,"Gamburg": 0,"Munich": 0, "Keln": 0}
+    }
+
+}
