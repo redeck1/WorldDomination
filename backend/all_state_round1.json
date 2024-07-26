@@ -5,7 +5,7 @@
         "Russia": {
             "country_name": "Россия",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -50,7 +50,7 @@
         "USA": {
             "country_name": "США",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -95,7 +95,7 @@
         "North_Korea": {
             "country_name": "Сев. Корея",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -140,7 +140,7 @@
         "Iraq": {
             "country_name": "Ирак",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -185,7 +185,7 @@
         "Greece": {
             "country_name": "Греция",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -230,7 +230,7 @@
         "China": {
             "country_name": "Китай",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -275,7 +275,7 @@
         "France": {
             "country_name": "Франция",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -320,7 +320,7 @@
         "Germany": {
             "country_name": "Германия",
             "mean": 57,
-            "balance": 1000,
+            "balance": 5000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
