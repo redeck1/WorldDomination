@@ -1,6 +1,7 @@
 {
     "round": 1,
     "name": "Россия",
+    "name2": "Russia",
     "spent_money": 1000,
     "ecologylvl": -100,
     "nuclear_tech_develop": 1,

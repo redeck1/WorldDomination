@@ -40,3 +40,4 @@ with open('Germany_state_changes.json', 'r', encoding='utf-8') as file:
     Germany_changes = json.load(file)
     file.close()
 
+print(Russia_changes)
