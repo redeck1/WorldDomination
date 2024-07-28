@@ -4,8 +4,8 @@
     "countries": {
         "Russia": {
             "country_name": "Россия",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -13,44 +13,44 @@
                 "Moscow": {
                     "city_name": "Москва",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Sanct-Peterburg":{
                     "city_name": "Санкт-Петербург",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Novosib": {
                     "city_name": "Новосибирск",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Vladivostok": {
                     "city_name": "Владивосток",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "USA": {
             "country_name": "США",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -58,44 +58,44 @@
                 "Washington": {
                     "city_name": "Вашингтон",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "New-York":{
                     "city_name": "Нью-Йорк",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Memphis": {
                     "city_name": "Мемфис",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Miami": {
                     "city_name": "Майами",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "North_Korea": {
             "country_name": "Сев. Корея",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -103,44 +103,44 @@
                 "Phenyan": {
                     "city_name": "Пхеньян",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Hamhin":{
                     "city_name": "Хамхын",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Chongin": {
                     "city_name": "Чхонджин",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Nampho": {
                     "city_name": "Нампхо",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "Iraq": {
             "country_name": "Ирак",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -148,44 +148,44 @@
                 "Bagdad": {
                     "city_name": "Багдад",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Mosul":{
                     "city_name": "Мосул",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Erbil": {
                     "city_name": "Эрбиль",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Basra": {
                     "city_name": "Басра",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "Greece": {
             "country_name": "Греция",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -193,44 +193,44 @@
                 "Afini": {
                     "city_name": "Афины",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Saloniki":{
                     "city_name": "Салоники",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Patri": {
                     "city_name": "Патры",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Larisa": {
                     "city_name": "Лариса",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "China": {
             "country_name": "Китай",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -238,44 +238,44 @@
                 "Pekin": {
                     "city_name": "Пекин",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Shanhai":{
                     "city_name": "Шанхай",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Chuncin": {
                     "city_name": "Чунцин",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Guanchgou": {
                     "city_name": "Гуанчжоу",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "France": {
             "country_name": "Франция",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -283,44 +283,44 @@
                 "Paris": {
                     "city_name": "Париж",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Marsel":{
                     "city_name": "Марсель",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Lion": {
                     "city_name": "Лион",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Nicca": {
                     "city_name": "Ницца",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }
         },
         "Germany": {
             "country_name": "Германия",
-            "mean": 57,
-            "balance": 5000,
+            "mean": 54,
+            "balance": 1000,
             "bombs": 0,
             "isHaveNuclearTech": false,
             "sanctionsFrom": [],
@@ -328,36 +328,36 @@
                 "Berlin": {
                     "city_name": "Берлин",
                     "image": "00",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Gamburg":{
                     "city_name": "Гамбург",
                     "image": "01",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Munich": {
                     "city_name": "Мюнхен",
                     "image": "02",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true},
 
                 "Keln": {
                     "city_name": "Кельн",
                     "image": "03",
-                    "liveLVL": 12,
+                    "liveLVL": 54,
                     "profit": 200,
-                    "growth": 30,
+                    "growth": 60,
                     "isHaveShield": false,
                     "isAlive": true}
             }

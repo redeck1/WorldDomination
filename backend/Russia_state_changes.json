@@ -2,10 +2,10 @@
     "round": 1,
     "name": "Россия",
     "name2": "Russia",
-    "spent_money": 1000,
-    "ecologylvl": -100,
+    "spent_money": 400,
+    "ecologylvl": -3,
     "nuclear_tech_develop": 1,
-    "created_bombs": 0,
+    "created_bombs": 2,
     "cities": {
         "Moscow": {
             "city_develop": 1,
@@ -27,7 +27,6 @@
     "sanctions": ["USA","Greece","France","Germany"],
 
     "money_transfer": {
-        "Russia": 100,
         "North_Korea": 150,
         "China": 200,
         "Germany": 160

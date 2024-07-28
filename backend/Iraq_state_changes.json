@@ -2,8 +2,8 @@
     "round": 1,
     "name": "Ирак",
     "name2": "Iraq",
-    "spent_money": 1000,
-    "ecologylvl": -100,
+    "spent_money": 400,
+    "ecologylvl": -3,
     "nuclear_tech_develop": 1,
     "created_bombs": 0,
     "cities": {
