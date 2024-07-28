@@ -6,8 +6,6 @@ with open('all_state_round1.json', 'r', encoding='utf-8') as file:
     file.close()
 
 
-
-
 with open('Russia_state_changes.json', 'r', encoding='utf-8') as file:
     Russia_changes = json.load(file)
     file.close()
