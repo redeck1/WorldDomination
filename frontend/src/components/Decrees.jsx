@@ -8,59 +8,34 @@ const Decrees = () => {
   const ecologyChanges = useSelector(selectEco);
   const cities = useSelector((state) => state.ownCountry.cities);
 
-  let outcome = 0;
-  expenses.map((expense) => (outcome += expense.cost));
+  function computeSum(array, prop) {
+    return array.reduce((sum, cur) => sum + cur[prop], 0);
+  }
 
-  let income = 0;
-  cities.map((city) => (income += city.profit));
+  const outcome = computeSum(expenses, "cost");
+  const income = computeSum(cities, "profit");
+  const allEcologyChanges = computeSum(ecologyChanges, "cost");
 
-  let allEcologyChanges = 0;
-  ecologyChanges.map((item) => (allEcologyChanges += item.cost));
-
-  const renderIncome = () => {
+  const renderPartOfExpense = (textColor, changes, sum, chr = "") => {
     return (
       <div>
-        <div className="d-flex justify-content-between">
-          <span className="text-success">Доход с городов</span>
-          <span className="text-success">{income}</span>
-        </div>
-        <div className="d-flex justify-content-between">
-          <span className="text-success fw-bold">Всего</span>
-          <span className="text-success fw-bold">{income}</span>
-        </div>
-      </div>
-    );
-  };
-
-  const renderExpenses = () => {
-    return (
-      <div>
-        {expenses.map((expense) => (
-          <div className="d-flex justify-content-between" key={expense.name}>
-            <span className="text-danger">{expense.name}</span>
-            <span className="text-danger">{expense.cost}</span>
-          </div>
-        ))}
-        <div className="d-flex justify-content-between">
-          <span className="text-danger fw-bold">Всего</span>
-          <span className="text-danger fw-bold">{outcome}</span>
-        </div>
-      </div>
-    );
-  };
-
-  const renderEcology = () => {
-    return (
-      <div>
-        {ecologyChanges.map((change) => (
+        {changes.map((change) => (
           <div className="d-flex justify-content-between" key={change.name}>
-            <span className="text-info">{change.name}</span>
-            <span className="text-info">{change.cost}%</span>
+            <span className={textColor}>{change.name}</span>
+            <span className={textColor}>
+              {change.cost ? change.cost : change.profit}
+              {chr}
+            </span>
           </div>
         ))}
         <div className="d-flex justify-content-between">
-          <span className="text-info fw-bold">Всего</span>
-          <span className="text-info fw-bold">{allEcologyChanges}%</span>
+          <span className={textColor} fw-bold="true">
+            Всего
+          </span>
+          <span className={textColor} fw-bold="true">
+            {sum}
+            {chr}
+          </span>
         </div>
       </div>
     );
@@ -70,11 +45,11 @@ const Decrees = () => {
     <div className="container py-3 mt-4 bg-body-tertiary rounded-4 ">
       <PanelHeader>отданые приказы</PanelHeader>
       <h5 className="text-danger">ВАШИ РАСХОДЫ</h5>
-      {renderExpenses()}
+      {renderPartOfExpense("text-danger", expenses, outcome)}
       <h5 className="text-success">ВАШИ ДОХОДЫ</h5>
-      {renderIncome()}
+      {renderPartOfExpense("text-success", cities, income)}
       <h5 className="text-info">ВАШ ВКЛАД В ЭКОЛОГИЮ</h5>
-      {renderEcology()}
+      {renderPartOfExpense("text-info", ecologyChanges, allEcologyChanges, "%")}
     </div>
   );
 };

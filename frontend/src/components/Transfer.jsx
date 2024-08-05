@@ -1,13 +1,23 @@
 import React from "react";
 import PanelHeader from "./PanelHeader";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const Transfer = () => {
   const countries = useSelector((state) => state.countries);
+  const [transfers, setTransfers] = useState(
+    countries.reduce((obj, item) => ({ ...obj, item: "" }), {})
+  );
+
+  const transferSubmit = (event) => {
+    event.preventDefault();
+    console.log(transfers);
+  };
+
   return (
     <div className="container py-3 mt-4 bg-body-tertiary rounded-4 ">
       <PanelHeader>перевести деньги</PanelHeader>
-      <div className="container">
+      <form className="container" onSubmit={(e) => transferSubmit(e)}>
         {countries.map((country) => (
           <div className="row mb-2" key={country.name}>
             <div className="col-4">{country.name}</div>
@@ -16,7 +26,10 @@ const Transfer = () => {
             </div>
           </div>
         ))}
-      </div>
+        <button className="btn btn-primary" type="submit">
+          Перевести
+        </button>
+      </form>
     </div>
   );
 };

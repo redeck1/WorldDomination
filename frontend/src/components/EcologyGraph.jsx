@@ -2,9 +2,9 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
 const data = [
   { round: 1, lvl: 90, amt: 2400 },
   { round: 2, lvl: 70, amt: 2400 },
-  { round: 3, lvl: 40, amt: 2400 },
-  { round: 4, lvl: 35, amt: 2400 },
-  { round: 5, lvl: 50, amt: 2400 },
+  // { round: 3, lvl: 40, amt: 2400 },
+  // { round: 4, lvl: 35, amt: 2400 },
+  // { round: 5, lvl: 50, amt: 2400 },
   // { round: 6, lvl: 55, amt: 2400 },
 ];
 
