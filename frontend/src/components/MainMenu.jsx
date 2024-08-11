@@ -7,7 +7,7 @@ import Transfer from "../components/Transfer";
 import Decrees from "../components/Decrees";
 import CityGroup from "../components/CityGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { endStep } from "../features/ownCountry/ownCountrySlice";
+import { endStep } from "../features/ownCountrySlice";
 
 const MainMenu = () => {
   const countryName = useSelector((state) => state.ownCountry.name);

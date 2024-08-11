@@ -7,7 +7,7 @@ function AllCountriesGraph({ data }) {
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis domain={[0, 100]} />
-      <Bar dataKey="mean" fill="rgb(136, 132, 216)" />
+      <Bar dataKey="meanLiveLvl" fill="rgb(136, 132, 216)" />
     </BarChart>
   );
 }

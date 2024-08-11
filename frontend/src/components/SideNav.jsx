@@ -7,7 +7,7 @@ const colors = [
   "#BE95C4",
   "#F4538A",
   "#C80036",
-  // "#1D24CA",
+  "#1D24CA",
   "#0C1844",
 ];
 
@@ -19,7 +19,7 @@ const SideNav = ({ country, index }) => {
           {country.name}
         </span>
         <span href="#" className="navbar-brand me-0">
-          {country.mean}%
+          {country.meanLiveLvl}%
         </span>
       </div>
     </nav>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeBombing } from "../features/ownCountry/ownCountrySlice";
+import { changeBombing } from "../features/ownCountrySlice";
 
 const SideTable = ({ country }) => {
   const dispatch = useDispatch();

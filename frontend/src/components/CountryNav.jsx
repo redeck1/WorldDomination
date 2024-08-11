@@ -17,7 +17,7 @@ const CountryNav = () => {
             </h6>
           </li>
           <li className="ms-3 text-primary">
-            <h6 className="fs-1">{country.mean}%</h6>
+            <h6 className="fs-1">{country.meanLiveLvl}%</h6>
           </li>
           <li className="ms-5">
             <h6 className="fw-bold text-primary">

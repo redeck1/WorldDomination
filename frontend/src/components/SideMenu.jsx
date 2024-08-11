@@ -1,9 +1,12 @@
 import React from "react";
 import SideCountry from "./SideCountry";
 import { useSelector } from "react-redux";
+import useExcludeSelect from "../extra/useExcludeSelect";
 
 const SideMenu = () => {
-  const countries = useSelector((state) => state.countries);
+  const thisName = useSelector((state) => state.ownCountry.name);
+  const countries = useExcludeSelect(thisName);
+
   return (
     <div className="mt-4">
       {countries.map((country, index) => (

@@ -1,7 +1,7 @@
 import React from "react";
 import PanelHeader from "./PanelHeader";
 import { useSelector } from "react-redux";
-import { selectEco, selectExpense } from "../features/ownCountry/ownCountrySlice";
+import { selectEco, selectExpense } from "../features/ownCountrySlice";
 
 const Decrees = () => {
   const expenses = useSelector(selectExpense);

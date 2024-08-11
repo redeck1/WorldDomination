@@ -1,7 +1,7 @@
 import React from "react";
 import PanelHeader from "./PanelHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { changeEco } from "../features/ownCountry/ownCountrySlice";
+import { changeEco } from "../features/ownCountrySlice";
 
 const Ecology = () => {
   const dispatch = useDispatch();

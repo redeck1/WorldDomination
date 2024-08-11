@@ -2,11 +2,13 @@ import React from "react";
 import PanelHeader from "./PanelHeader";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import useExcludeSelect from "../extra/useExcludeSelect";
 
 const Transfer = () => {
-  const countries = useSelector((state) => state.countries);
+  const thisName = useSelector((state) => state.ownCountry.name);
+  const countries = useExcludeSelect(thisName);
   const [transfers, setTransfers] = useState(
-    countries.reduce((obj, item) => ({ ...obj, item: "" }), {})
+    countries.reduce((obj, item) => ({ ...obj, [item.name]: "" }), {})
   );
 
   const transferSubmit = (event) => {

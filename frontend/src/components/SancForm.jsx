@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeSanction } from "../features/ownCountry/ownCountrySlice";
+import { changeSanction } from "../features/ownCountrySlice";
+import useExcludeSelect from "../extra/useExcludeSelect";
 
 const SancForm = () => {
   const dispatch = useDispatch();
@@ -9,7 +10,9 @@ const SancForm = () => {
   );
   // console.log(activeSanctions.find((item) => item.to === "США") ? true : false);
 
-  const countries = useSelector((state) => state.countries);
+  const thisName = useSelector((state) => state.ownCountry.name);
+  const countries = useExcludeSelect(thisName);
+
   return (
     <>
       {countries.map((country) => (

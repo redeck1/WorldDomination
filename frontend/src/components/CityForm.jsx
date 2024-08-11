@@ -1,5 +1,5 @@
 import React from "react";
-import { changeCity } from "../features/ownCountry/ownCountrySlice";
+import { changeCity } from "../features/ownCountrySlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const CityForm = ({ name }) => {

@@ -11,7 +11,7 @@ const CityTable = (city) => {
           </tr>
           <tr>
             <th>Ур. жизни</th>
-            <td>{city.liveLVL}%</td>
+            <td>{city.liveLvl}%</td>
           </tr>
           <tr>
             <th>Доход</th>

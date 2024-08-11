@@ -1,58 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
-  round: 1,
-  ecologyLvl: 90,
-  name: "Россия",
-  mean: 57,
-  balance: 1000,
-  bombs: 1,
-  isHaveNuclearTech: false,
+  auth: false,
+  status: "idle",
+  round: null,
+  ecologyLvl: null,
+  name: null,
+  meanLiveLvl: null,
+  balance: null,
+  bombs: null,
+  isHaveNuclearTech: null,
   nuclearTech: false, // развивать ли ядерную технологию
   ecology: false,
-  sanctionsFrom: [],
+  sanctionsFrom: null,
   changes: [],
-  cities: [
-    {
-      name: "Москва",
-      image: "00",
-      liveLVL: 12,
-      profit: 200,
-      growth: 30,
-      isHaveShield: false,
-      isAlive: true,
-    },
-    {
-      name: "Санкт-Петербург",
-      image: "01",
-      liveLVL: 12,
-      profit: 200,
-      growth: 30,
-      isHaveShield: false,
-      isAlive: true,
-    },
-    {
-      name: "Новосибирск",
-      image: "02",
-      liveLVL: 12,
-      profit: 200,
-      growth: 30,
-      isHaveShield: false,
-      isAlive: true,
-    },
-    {
-      name: "Владивосток",
-      image: "03",
-      liveLVL: 12,
-      profit: 200,
-      growth: 30,
-      isHaveShield: false,
-      isAlive: true,
-    },
-  ],
+  cities: null,
 };
 
-// const endStep = createAsyncThunk()
+export const checkAuth = createAsyncThunk("checkAuth", async ({ login, password }) => {
+  const { data } = await axios.post("http://localhost:4444/login", { login, password });
+  return data;
+});
 
 const ownCountrySlice = createSlice({
   name: "ownCountry",
@@ -149,6 +118,18 @@ const ownCountrySlice = createSlice({
     endStep(state, action) {
       console.log(action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(checkAuth.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        return { ...state, status: "completed", ...action.payload };
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.status = "error";
+      });
   },
 });
 
