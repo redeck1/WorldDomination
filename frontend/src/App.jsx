@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import Home from "./pages/Home";
 import Statistics from "./pages/Statistics";
 import Login from "./pages/Login";
+import { useDispatch } from "react-redux";
+import { fetchCountriesData } from "./features/countriesSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCountriesData());
+  }, []);
+
+  const Navigation = (WrappedComponent) => {
+    const NewComponent = () => {
+      return (
+        <>
+          <Navbar />
+          <WrappedComponent />
+          <div style={{ marginBottom: 600 + "px" }}></div>
+        </>
+      );
+    };
+    return <NewComponent />;
+  };
+
   return (
     <BrowserRouter>
-      <Navbar />
       <Routes>
-        <Route path="" exact="true" element={<Login />}></Route>
-        <Route path="home" element={<Home />} />
-        <Route path="statistics" element={<Statistics />} />
+        <Route path="" exact="true" element={<Login />} />
+        <Route path="home" element={Navigation(Home)} />
+        <Route path="statistics" element={Navigation(Statistics)} />
       </Routes>
-      <div style={{ marginBottom: "600px" }}></div>
     </BrowserRouter>
   );
 }

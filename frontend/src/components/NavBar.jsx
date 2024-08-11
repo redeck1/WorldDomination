@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ children }) => {
+const Navbar = () => {
   const round = useSelector((state) => state.ownCountry.round);
 
   return (
@@ -35,7 +35,6 @@ const Navbar = ({ children }) => {
           </div>
         </div>
       </nav>
-      {children}
     </>
   );
 };
