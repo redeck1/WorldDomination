@@ -1,12 +1,12 @@
 const COUNTRIES = {
   США: ["Вашингтон", "Нью-Йорк", "Мемфис", "Майами"],
   "Сев. Корея": ["Пхеньян", "Хамхын", "Чхонджин", "Нампхо"],
-  Ирак: ["Багдад", "Мосул", "Эрбиль", "Басра"],
-  Греция: ["Афины", "Салоники", "Патры", "Лариса"],
-  Китай: ["Пекин", "Шанхай", "Чунцин", "Гуанчжоу"],
-  Франция: ["Париж", "Марсель", "Лион", "Ницца"],
-  Германия: ["Берлин", "Гамбург", "Мюнхен", "Кёльн"],
-  Россия: ["Москва", "Санкт-Петербург", "Новосибирск", "Владивосток"],
+  // Ирак: ["Багдад", "Мосул", "Эрбиль", "Басра"],
+  // Греция: ["Афины", "Салоники", "Патры", "Лариса"],
+  // Китай: ["Пекин", "Шанхай", "Чунцин", "Гуанчжоу"],
+  // Франция: ["Париж", "Марсель", "Лион", "Ницца"],
+  // Германия: ["Берлин", "Гамбург", "Мюнхен", "Кёльн"],
+  // Россия: ["Москва", "Санкт-Петербург", "Новосибирск", "Владивосток"],
 };
 
 function Country(name, citiesName) {
@@ -16,23 +16,27 @@ function Country(name, citiesName) {
   this.isHaveNuclearTech = false;
   this.bombs = 0;
   this.sanctionsFrom = [];
-  this.cities = citiesName.reduce((prev, item) => {
-    prev.push({
-      name: item,
-      liveLvl: 54,
-      profit: 200,
-      growth: 60,
-      isHaveShield: false,
-      isAlive: true,
-    });
-    return prev;
-  }, []);
+  this.cities = citiesName.reduce(
+    (prev, item) => [
+      ...prev,
+      {
+        name: item,
+        liveLvl: 54,
+        profit: (300 * 54) / 100,
+        growth: 60,
+        isHaveShield: false,
+        isAlive: true,
+      },
+    ],
+    []
+  );
 }
 
 const countries = Object.keys(COUNTRIES).reduce(
   (prev, curr) => ({ ...prev, [curr]: new Country(curr, COUNTRIES[curr]) }),
   {}
 );
+
 /*
 {США: Country {
   name: 'США',

@@ -5,7 +5,7 @@ const initialState = {
   auth: false,
   status: "idle",
   round: null,
-  ecologyLvl: null,
+  ecologyLvl: [],
   name: null,
   meanLiveLvl: null,
   balance: null,
@@ -20,6 +20,16 @@ const initialState = {
 
 export const checkAuth = createAsyncThunk("checkAuth", async ({ login, password }) => {
   const { data } = await axios.post("http://localhost:4444/login", { login, password });
+  return data;
+});
+
+export const nextMove = createAsyncThunk("nextMove", async ({ name, changes }) => {
+  const { data } = await axios.post("http://localhost:4444/next", { name, changes });
+  return data;
+});
+
+export const updateInfo = createAsyncThunk("updateInfo", async () => {
+  const { data } = await axios.get("http://localhost:4444/update_info");
   return data;
 });
 
@@ -115,8 +125,8 @@ const ownCountrySlice = createSlice({
         );
       }
     },
-    endStep(state, action) {
-      console.log(action.payload);
+    reset(state) {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -140,7 +150,7 @@ export const {
   changeCity,
   buildBombs,
   changeBombing,
-  endStep,
+  reset,
 } = ownCountrySlice.actions;
 
 export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");

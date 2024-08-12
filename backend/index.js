@@ -13,6 +13,23 @@ const PASSWORDS = {
   Россия: "HpEJC4YfPOHcpVI3g7dsJ59gFe3Z7cVG",
 };
 
+const generalInfo = {
+  completed: [],
+  round: 1,
+  ecologyLvl: [{ round: 1, lvl: 90 }],
+};
+
+const newGeneralInfo = {
+  completed: [],
+  round: generalInfo.round + 1,
+  ecologyLvl: [
+    ...generalInfo.ecologyLvl,
+    { round: generalInfo.round + 1, lvl: generalInfo.ecologyLvl.at(-1).lvl },
+  ],
+};
+const newCountries = structuredClone(countries);
+const attacks = [];
+
 const PORT = process.env.PORT || 4444;
 
 const app = express();
@@ -36,15 +53,80 @@ app.get("/countries", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  setTimeout(() => {
-    const [login, password] = [req.body.login, req.body.password];
-    if (password !== PASSWORDS[login] && password !== "123123")
-      return res.status(400).json("Неверный пароль");
-    return res.status(200).json({
-      auth: true,
-      ...countries[login],
-    });
-  }, 1000);
+  const [login, password] = [req.body.login, req.body.password];
+  if (password !== PASSWORDS[login] && password !== "123123")
+    return res.status(400).json("Неверный пароль");
+  return res.status(200).json({
+    auth: true,
+    ...countries[login],
+    ...generalInfo,
+  });
+});
+
+app.post("/next", (req, res) => {
+  const { name, changes } = req.body;
+  if (!generalInfo.completed.includes(name)) {
+    generalInfo.completed.push(name);
+  } else {
+    return res.status(400).json("Эта страна уже завершила ход");
+  }
+
+  for (let change of changes) {
+    switch (change.type) {
+      case "eco":
+        let lvl = newGeneralInfo.ecologyLvl.at(-1).lvl;
+        if (lvl + change.cost > 0) {
+          lvl += change.cost;
+        } else {
+          lvl = 1;
+        }
+        newGeneralInfo.ecologyLvl.at(-1).lvl = lvl;
+        break;
+
+      case "sanction":
+        newCountries[change.to].sanctionsFrom.push(name);
+        break;
+
+      case "atack":
+        attacks.push(change);
+        break;
+
+      case "expense":
+        newCountries[name].balance -= change.cost;
+
+        if (change.name === "Развитие ядерной технологии") {
+          newCountries[name].isHaveNuclearTech = true;
+        } else if (change.name.includes("Улучшение") || change.name.includes("Щит")) {
+          const cityName = change.name.split(" ").at(-1);
+          const index = newCountries[name].cities.findIndex((city) => city.name === cityName);
+
+          change.name.includes("Улучшение")
+            ? (newCountries[name].cities[index].growth += 10)
+            : (newCountries[name].cities[index].isHaveShield = true);
+        } else if (change.name === "Строительство бомб") {
+          if (countries[name].isHaveNuclearTech === true) {
+            newCountries[name].bombs += change.count;
+          } else {
+            return res.status(400).send("Ядерная технология не развита");
+          }
+        }
+        break;
+
+      default:
+        return res.status(400).send("Неправильный тип изменения");
+    }
+  }
+
+  newCountries[name].balance += newCountries[name].cities.reduce(
+    (sum, city) => sum + city.profit,
+    0
+  );
+
+  return res.status(200).json("data accepted");
+});
+
+app.get("/update_info", (_, res) => {
+  res.status(200).json({ newGeneralInfo, newCountries, attacks });
 });
 
 app.listen(PORT, (err) => {

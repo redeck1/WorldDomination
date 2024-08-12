@@ -7,7 +7,7 @@ const Ecology = () => {
   const dispatch = useDispatch();
   const clicked = useSelector((state) => state.ownCountry.ecology);
   const balance = useSelector((state) => state.ownCountry.balance);
-  const ecoLvl = useSelector((state) => state.ownCountry.ecologyLvl);
+  const ecoLvl = useSelector((state) => state.ownCountry.ecologyLvl).at(-1).lvl;
 
   return (
     <div className="bg-body-tertiary rounded-4 p-3 mt-3">

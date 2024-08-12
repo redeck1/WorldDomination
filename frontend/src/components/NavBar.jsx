@@ -1,9 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { reset } from "../features/ownCountrySlice";
 
 const Navbar = () => {
   const round = useSelector((state) => state.ownCountry.round);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    navigate("/");
+    dispatch(reset());
+  };
 
   return (
     <>
@@ -29,9 +37,9 @@ const Navbar = () => {
             <Link to="/statistics" className="btn btn-primary">
               Общая статистика
             </Link>
-            <Link to="/" className="btn btn-primary">
+            <button className="btn btn-primary" onClick={signOut}>
               Выйти
-            </Link>
+            </button>
           </div>
         </div>
       </nav>

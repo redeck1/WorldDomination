@@ -7,7 +7,7 @@ import Transfer from "../components/Transfer";
 import Decrees from "../components/Decrees";
 import CityGroup from "../components/CityGroup";
 import { useDispatch, useSelector } from "react-redux";
-import { endStep } from "../features/ownCountrySlice";
+import { nextMove, updateInfo } from "../features/ownCountrySlice";
 
 const MainMenu = () => {
   const countryName = useSelector((state) => state.ownCountry.name);
@@ -42,9 +42,16 @@ const MainMenu = () => {
         <button
           type="button"
           className="btn btn-outline-primary btn-lg fw-bold"
-          onClick={() => dispatch(endStep({ name: countryName, changes: changes }))}
+          onClick={() => dispatch(nextMove({ name: countryName, changes: changes }))}
         >
           Закончить ход
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary btn-lg fw-bold"
+          onClick={() => dispatch(updateInfo())}
+        >
+          Обновить
         </button>
       </div>
     </div>
