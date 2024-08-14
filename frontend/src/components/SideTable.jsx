@@ -11,7 +11,7 @@ const SideTable = ({ country }) => {
 
   const renderCity = (city) => {
     if (city.isAlive) {
-      const clicked = atackedCities.find((item) => item.name === `${country.name}-${city.name}`)
+      const clicked = atackedCities.find((item) => item.name === `${country.name}/${city.name}`)
         ? true
         : false;
       return (
@@ -19,12 +19,12 @@ const SideTable = ({ country }) => {
           <input
             type="checkbox"
             className="form-check-input"
-            id={`${country.name}-${city.name}`}
+            id={`${country.name}/${city.name}`}
             checked={clicked}
-            disabled={bombs - 1 < 0 && !clicked}
+            disabled={bombs < 1 && !clicked}
             onChange={(e) => dispatch(changeBombing({ name: e.target.id, bool: e.target.checked }))}
           />
-          <label htmlFor={`${country.name}-${city.name}`}>Бомбить</label>
+          <label htmlFor={`${country.name}/${city.name}`}>Бомбить</label>
         </div>
       );
     }
@@ -34,7 +34,7 @@ const SideTable = ({ country }) => {
   return (
     <div className="d-flex justify-content-between px-3">
       {country.cities.map((city) => (
-        <div key={country.name + "-" + city.name}>
+        <div key={country.name + "/" + city.name}>
           <h6 className="text-center fw-bold">{city.name}</h6>
           <p style={{ fontSize: 14 }} className="mb-1">
             Ур. жизни {city.liveLvl}%

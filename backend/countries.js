@@ -1,21 +1,25 @@
 const COUNTRIES = {
   США: ["Вашингтон", "Нью-Йорк", "Мемфис", "Майами"],
   "Сев. Корея": ["Пхеньян", "Хамхын", "Чхонджин", "Нампхо"],
-  // Ирак: ["Багдад", "Мосул", "Эрбиль", "Басра"],
-  // Греция: ["Афины", "Салоники", "Патры", "Лариса"],
-  // Китай: ["Пекин", "Шанхай", "Чунцин", "Гуанчжоу"],
-  // Франция: ["Париж", "Марсель", "Лион", "Ницца"],
-  // Германия: ["Берлин", "Гамбург", "Мюнхен", "Кёльн"],
-  // Россия: ["Москва", "Санкт-Петербург", "Новосибирск", "Владивосток"],
+  Ирак: ["Багдад", "Мосул", "Эрбиль", "Басра"],
+  Греция: ["Афины", "Салоники", "Патры", "Лариса"],
+  Китай: ["Пекин", "Шанхай", "Чунцин", "Гуанчжоу"],
+  Франция: ["Париж", "Марсель", "Лион", "Ницца"],
+  Германия: ["Берлин", "Гамбург", "Мюнхен", "Кёльн"],
+  Россия: ["Москва", "Санкт-Петербург", "Новосибирск", "Владивосток"],
 };
+
+export const numPlayers = 2;
 
 function Country(name, citiesName) {
   this.name = name;
+  this.isComplete = false;
   this.balance = 1000;
   this.meanLiveLvl = 54;
   this.isHaveNuclearTech = false;
   this.bombs = 0;
   this.sanctionsFrom = [];
+  this.changes = [];
   this.cities = citiesName.reduce(
     (prev, item) => [
       ...prev,
@@ -32,10 +36,9 @@ function Country(name, citiesName) {
   );
 }
 
-const countries = Object.keys(COUNTRIES).reduce(
-  (prev, curr) => ({ ...prev, [curr]: new Country(curr, COUNTRIES[curr]) }),
-  {}
-);
+const countries = Object.keys(COUNTRIES)
+  .slice(0, numPlayers)
+  .reduce((prev, curr) => ({ ...prev, [curr]: new Country(curr, COUNTRIES[curr]) }), {});
 
 /*
 {США: Country {
@@ -73,6 +76,16 @@ export function prepareCountries(countries) {
     });
   }
   return preparedCountries;
+}
+
+export function next(country, ecologyLvl) {
+  country.balance += Math.round(country.cities.reduce((sum, city) => sum + city.profit, 0));
+  country.cities = country.cities
+    .map((city) => ({ ...city, liveLvl: Math.round((city.growth * ecologyLvl) / 100) }))
+    .map((city) => ({ ...city, profit: 3 * city.liveLvl }));
+  country.meanLiveLvl = Math.round(country.cities.reduce((sum, city) => sum + city.liveLvl, 0) / 4);
+  country.isComplete = false;
+  return country;
 }
 
 export default countries;

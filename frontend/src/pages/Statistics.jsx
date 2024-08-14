@@ -20,7 +20,7 @@ const Statistics = () => {
 
   return (
     <>
-      <div class="row row-cols-4 mt-4">
+      <div className="row row-cols-4 mt-4">
         {countries.map((country, index) => (
           <div className="col" key={country.name}>
             <h3 className="ps-5">

@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import countries, { prepareCountries } from "./countries.js";
+import countries, { prepareCountries, next, numPlayers } from "./countries.js";
 
 const PASSWORDS = {
   США: "pSJzymBZNOEzALyZT1t3CMmUyMSIZ1kc",
@@ -13,14 +13,14 @@ const PASSWORDS = {
   Россия: "HpEJC4YfPOHcpVI3g7dsJ59gFe3Z7cVG",
 };
 
-const generalInfo = {
-  completed: [],
+let generalInfo = {
+  completed: 0,
   round: 1,
   ecologyLvl: [{ round: 1, lvl: 90 }],
 };
 
-const newGeneralInfo = {
-  completed: [],
+let newGeneralInfo = {
+  completed: 0,
   round: generalInfo.round + 1,
   ecologyLvl: [
     ...generalInfo.ecologyLvl,
@@ -65,10 +65,11 @@ app.post("/login", (req, res) => {
 
 app.post("/next", (req, res) => {
   const { name, changes } = req.body;
-  if (!generalInfo.completed.includes(name)) {
-    generalInfo.completed.push(name);
-  } else {
+  if (countries[name].isComplete) {
     return res.status(400).json("Эта страна уже завершила ход");
+  } else {
+    countries[name].isComplete = true;
+    generalInfo.completed += 1;
   }
 
   for (let change of changes) {
@@ -116,17 +117,32 @@ app.post("/next", (req, res) => {
         return res.status(400).send("Неправильный тип изменения");
     }
   }
-
-  newCountries[name].balance += newCountries[name].cities.reduce(
-    (sum, city) => sum + city.profit,
-    0
-  );
-
+  if (generalInfo.completed === numPlayers) {
+    console.log("НОВЫЙ РАУНД");
+    newGeneralInfo.ecologyLvl.at(-1).lvl = Math.round(newGeneralInfo.ecologyLvl.at(-1).lvl);
+    for (const key in newCountries) {
+      countries[key] = next(newCountries[key], newGeneralInfo.ecologyLvl.at(-1).lvl);
+    }
+    generalInfo = structuredClone(newGeneralInfo);
+    generalInfo.completed = 0;
+    newGeneralInfo = {
+      completed: 0,
+      round: generalInfo.round + 1,
+      ecologyLvl: [
+        ...generalInfo.ecologyLvl,
+        { round: generalInfo.round + 1, lvl: generalInfo.ecologyLvl.at(-1).lvl },
+      ],
+    };
+  }
   return res.status(200).json("data accepted");
 });
 
-app.get("/update_info", (_, res) => {
-  res.status(200).json({ newGeneralInfo, newCountries, attacks });
+app.get("/update_info", (req, res) => {
+  const countryName = req.query.country_name;
+  return res.status(200).json({
+    countries: prepareCountries(countries),
+    ownCountry: { ...countries[countryName], ...generalInfo },
+  });
 });
 
 app.listen(PORT, (err) => {

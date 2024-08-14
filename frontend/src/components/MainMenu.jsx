@@ -46,13 +46,6 @@ const MainMenu = () => {
         >
           Закончить ход
         </button>
-        <button
-          type="button"
-          className="btn btn-primary btn-lg fw-bold"
-          onClick={() => dispatch(updateInfo())}
-        >
-          Обновить
-        </button>
       </div>
     </div>
   );

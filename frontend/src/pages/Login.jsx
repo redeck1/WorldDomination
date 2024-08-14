@@ -15,10 +15,12 @@ function Login() {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    await dispatch(checkAuth({ login, password }));
-
-    navigate("/home");
+    dispatch(checkAuth({ login, password }));
   };
+
+  if (auth) {
+    navigate("/home");
+  }
 
   if (countriesLoading) {
     return (

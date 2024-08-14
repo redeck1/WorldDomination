@@ -50,7 +50,11 @@ export const fetchCountriesData = createAsyncThunk("countries/fetchCountriesData
 const countriesSlice = createSlice({
   name: "countries",
   initialState,
-  reducers: {},
+  reducers: {
+    setCountries(state, action) {
+      state.items = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCountriesData.pending, (state) => {
@@ -62,5 +66,7 @@ const countriesSlice = createSlice({
       });
   },
 });
+
+export const { setCountries } = countriesSlice.actions;
 
 export default countriesSlice.reducer;

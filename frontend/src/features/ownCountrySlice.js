@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  isComplete: false,
   auth: false,
   status: "idle",
   round: null,
@@ -12,10 +13,10 @@ const initialState = {
   bombs: null,
   isHaveNuclearTech: null,
   nuclearTech: false, // развивать ли ядерную технологию
-  ecology: false,
+  ecology: false, // улучшать ли экологию
   sanctionsFrom: null,
-  changes: [],
-  cities: null,
+  changes: [], // приказы игрока
+  cities: [],
 };
 
 export const checkAuth = createAsyncThunk("checkAuth", async ({ login, password }) => {
@@ -28,25 +29,23 @@ export const nextMove = createAsyncThunk("nextMove", async ({ name, changes }) =
   return data;
 });
 
-export const updateInfo = createAsyncThunk("updateInfo", async () => {
-  const { data } = await axios.get("http://localhost:4444/update_info");
-  return data;
-});
-
 const ownCountrySlice = createSlice({
   name: "ownCountry",
   initialState,
   reducers: {
+    setOwnCountry(state, action) {
+      return { ...state, ...action.payload };
+    },
     changeEco(state, action) {
       state.ecology = action.payload;
       if (action.payload) {
         state.changes.push(
-          { type: "expense", name: "Улучшение экологии", cost: 150 },
-          { type: "eco", name: "Улучшение экологии", cost: 20 }
+          { type: "expense", name: "Вклад в экологию", cost: 150 },
+          { type: "eco", name: "Вклад в экологию", cost: 20 }
         );
         state.balance -= 150;
       } else {
-        state.changes = state.changes.filter((item) => item.name !== "Улучшение экологии");
+        state.changes = state.changes.filter((item) => item.name !== "Вклад в экологию");
         state.balance += 150;
       }
     },
@@ -125,7 +124,7 @@ const ownCountrySlice = createSlice({
         );
       }
     },
-    reset(state) {
+    reset() {
       return initialState;
     },
   },
@@ -139,11 +138,21 @@ const ownCountrySlice = createSlice({
       })
       .addCase(checkAuth.rejected, (state) => {
         state.status = "error";
+      })
+      .addCase(nextMove.pending, (state) => {
+        // state.status = "loading";
+      })
+      .addCase(nextMove.fulfilled, (state, action) => {
+        state.isComplete = true;
+      })
+      .addCase(nextMove.rejected, (state, action) => {
+        state.status = "error";
       });
   },
 });
 
 export const {
+  setOwnCountry,
   changeEco,
   changeTech,
   changeSanction,
