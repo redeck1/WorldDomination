@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import countries, { prepareCountries, next, numPlayers } from "./countries.js";
+import countries, { prepareCountries, next, numPlayers, attack } from "./countries.js";
 
 const PASSWORDS = {
   США: "pSJzymBZNOEzALyZT1t3CMmUyMSIZ1kc",
@@ -89,7 +89,7 @@ app.post("/next", (req, res) => {
         break;
 
       case "atack":
-        attacks.push(change);
+        attacks.push(change.name);
         break;
 
       case "expense":
@@ -119,6 +119,11 @@ app.post("/next", (req, res) => {
   }
   if (generalInfo.completed === numPlayers) {
     console.log("НОВЫЙ РАУНД");
+    for (const names of attacks) {
+      const [countryName, cityName] = names.split("/");
+      const cityIndex = countries[countryName].cities.findIndex((city) => city.name === cityName);
+      newCountries[countryName].cities[cityIndex] = attack(newCountries[countryName], cityIndex);
+    }
     newGeneralInfo.ecologyLvl.at(-1).lvl = Math.round(newGeneralInfo.ecologyLvl.at(-1).lvl);
     for (const key in newCountries) {
       countries[key] = next(newCountries[key], newGeneralInfo.ecologyLvl.at(-1).lvl);

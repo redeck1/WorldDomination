@@ -78,6 +78,17 @@ export function prepareCountries(countries) {
   return preparedCountries;
 }
 
+export function attack(country, cityIndex) {
+  const city = country.cities[cityIndex];
+  if (city.isHaveShield) {
+    city.isHaveShield = false;
+  } else {
+    city.isAlive = false;
+    city.growth = 0;
+  }
+  return city;
+}
+
 export function next(country, ecologyLvl) {
   country.balance += Math.round(country.cities.reduce((sum, city) => sum + city.profit, 0));
   country.cities = country.cities
