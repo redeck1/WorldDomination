@@ -35,6 +35,7 @@ const PORT = process.env.PORT || 4444;
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static("imgs"));
 
 app.use("/", (req, res, next) => {
   const now = new Date();
