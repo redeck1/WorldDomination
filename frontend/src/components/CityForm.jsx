@@ -48,8 +48,13 @@ const CityForm = ({ name }) => {
           }
         ></input>
         <label className="form-check-label text-center" htmlFor={`Щит для ${name}`}>
-          {isHaveShield ? "Щит построен" : "Построить щит"}{" "}
-          <span className="opacity-50">(300$)</span>
+          {isHaveShield ? (
+            <>Щит построен</>
+          ) : (
+            <>
+              Построить щит <span className="opacity-50">(300$)</span>
+            </>
+          )}
         </label>
       </div>
     </form>

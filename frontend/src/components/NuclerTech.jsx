@@ -64,7 +64,7 @@ let NuclerTech = () => {
               name="buildBombs"
               id="2bomb"
               checked={bombsToBuild === 2}
-              disabled={balance - 300 < 0 && bombsToBuild !== 2}
+              disabled={balance + waste - 300 < 0 && bombsToBuild !== 2}
               onChange={(e) => onClickHandler(e)}
             />
             <label className="form-check-label" htmlFor="2bomb">

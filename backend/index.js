@@ -28,7 +28,7 @@ let newGeneralInfo = {
   ],
 };
 const newCountries = structuredClone(countries);
-const attacks = [];
+let attacks = [];
 
 const PORT = process.env.PORT || 4444;
 
@@ -89,6 +89,7 @@ app.post("/next", (req, res) => {
         break;
 
       case "atack":
+        newCountries[name].bombs -= 1;
         attacks.push(change.name);
         break;
 
@@ -124,9 +125,14 @@ app.post("/next", (req, res) => {
       const cityIndex = countries[countryName].cities.findIndex((city) => city.name === cityName);
       newCountries[countryName].cities[cityIndex] = attack(newCountries[countryName], cityIndex);
     }
+    attacks = [];
+
     newGeneralInfo.ecologyLvl.at(-1).lvl = Math.round(newGeneralInfo.ecologyLvl.at(-1).lvl);
     for (const key in newCountries) {
-      countries[key] = next(newCountries[key], newGeneralInfo.ecologyLvl.at(-1).lvl);
+      countries[key] = structuredClone(
+        next(newCountries[key], newGeneralInfo.ecologyLvl.at(-1).lvl)
+      );
+      newCountries[key].sanctionsFrom = [];
     }
     generalInfo = structuredClone(newGeneralInfo);
     generalInfo.completed = 0;
