@@ -144,6 +144,9 @@ const ownCountrySlice = createSlice({
       })
       .addCase(nextMove.fulfilled, (state, action) => {
         state.isComplete = true;
+        state.changes = [];
+        state.nuclearTech = false;
+        state.ecology = false;
       })
       .addCase(nextMove.rejected, (state, action) => {
         state.status = "error";

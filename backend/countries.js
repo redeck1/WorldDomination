@@ -19,7 +19,6 @@ function Country(name, citiesName) {
   this.isHaveNuclearTech = false;
   this.bombs = 0;
   this.sanctionsFrom = [];
-  this.changes = [];
   this.cities = citiesName.reduce(
     (prev, item) => [
       ...prev,
