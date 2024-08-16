@@ -5,13 +5,13 @@ import { checkAuth } from "../features/ownCountrySlice";
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const countries = useSelector((state) => state.countries.items);
   const authLoading = useSelector((state) => state.ownCountry.status) === "loading";
   const countriesLoading = useSelector((state) => state.countries.status) === "loading";
   const auth = useSelector((state) => state.ownCountry.auth);
   const [login, setLogin] = useState(countries[0].name);
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const submitHandler = async (event) => {
     event.preventDefault();

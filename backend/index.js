@@ -1,6 +1,13 @@
 import express from "express";
 import cors from "cors";
 import countries, { prepareCountries, next, numPlayers, attack } from "./countries.js";
+import { existsSync } from "fs";
+
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const PASSWORDS = {
   США: "pSJzymBZNOEzALyZT1t3CMmUyMSIZ1kc",
@@ -35,7 +42,7 @@ const PORT = process.env.PORT || 4444;
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(express.static("imgs"));
+app.use(express.static(__dirname + "/imgs"));
 
 app.use("/", (req, res, next) => {
   const now = new Date();
@@ -155,6 +162,14 @@ app.get("/update_info", (req, res) => {
     countries: prepareCountries(countries),
     ownCountry: { ...countries[countryName], ...generalInfo },
   });
+});
+
+app.get("/imgs/:name", (req, res) => {
+  const name = req.params.name;
+  if (existsSync(__dirname + `/imgs/${name}`)) {
+    res.sendFile(__dirname + `/imgs/${name}`);
+  }
+  res.sendFile(__dirname + `/imgs/NotFound.png`);
 });
 
 app.listen(PORT, (err) => {
