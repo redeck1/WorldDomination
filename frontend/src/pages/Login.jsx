@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { checkAuth } from "../features/ownCountrySlice";
+import withLoader from "../extra/ButtonWithLoading";
 
 function Login() {
   const dispatch = useDispatch();
@@ -32,6 +33,10 @@ function Login() {
     );
   }
 
+  const ButtonWithLoader = withLoader((props) => {
+    return <button {...props}>Подтвердить</button>;
+  });
+
   return (
     <div className="d-flex justify-content-center h-100 w-100 position-fixed">
       <form onSubmit={(e) => submitHandler(e)} className="mt-5">
@@ -59,20 +64,12 @@ function Login() {
             value={password}
           ></input>
         </div>
-        {authLoading ? (
-          <button className="btn btn-primary" type="button" disabled>
-            <span
-              className="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            Загрузка...
-          </button>
-        ) : (
-          <button type="submit" className="btn btn-outline-primary">
-            Подтвердить
-          </button>
-        )}
+        <ButtonWithLoader
+          className="btn btn-outline-primary"
+          type="button"
+          loading={authLoading}
+          onClick={submitHandler}
+        />
       </form>
     </div>
   );
