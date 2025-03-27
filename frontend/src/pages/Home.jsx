@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import SideMenu from "../components/SideMenu";
-import MainMenu from "../components/MainMenu";
+import SideMenu from "../component/SideMenu/SideMenu";
+import MainMenu from "../component/MainMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setCountries } from "../features/countriesSlice";
 import { setOwnCountry } from "../features/ownCountrySlice";
 import axios from "axios";
 import withLoader from "../extra/ButtonWithLoading";
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Home = () => {
   const isComplete = useSelector((state) => state.ownCountry.isComplete);
@@ -17,7 +19,7 @@ const Home = () => {
   const updateData = async () => {
     setLoading(true);
     const { data } = await axios.get(
-      `http://localhost:4444/update_info?country_name=${countryName}`
+      `${apiUrl}/update_info?country_name=${countryName}`
     );
     setLoading(false);
     const ownCountry = data.ownCountry;
@@ -47,9 +49,7 @@ const Home = () => {
             <MainMenu />
           )}
         </div>
-        <div className="col-4">
-          <SideMenu />
-        </div>
+        <div className="col-4">{isComplete ? null : <SideMenu />}</div>
       </div>
     </div>
   );

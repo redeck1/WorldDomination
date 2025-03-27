@@ -1,8 +1,8 @@
 import React from "react";
-import PanelHeader from "./PanelHeader";
+import PanelHeader from "../PanelHeader";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import useExcludeSelect from "../extra/useExcludeSelect";
+import useExcludeSelect from "../../extra/useExcludeSelect";
 
 const Transfer = () => {
   const thisName = useSelector((state) => state.ownCountry.name);

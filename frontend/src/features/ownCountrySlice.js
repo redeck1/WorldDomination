@@ -19,15 +19,23 @@ const initialState = {
   cities: [],
 };
 
-export const checkAuth = createAsyncThunk("checkAuth", async ({ login, password }) => {
-  const { data } = await axios.post("http://localhost:4444/login", { login, password });
-  return data;
-});
+const apiUrl = process.env.REACT_APP_API_URL;
 
-export const nextMove = createAsyncThunk("nextMove", async ({ name, changes }) => {
-  const { data } = await axios.post("http://localhost:4444/next", { name, changes });
-  return data;
-});
+export const checkAuth = createAsyncThunk(
+  "checkAuth",
+  async ({ login, password }) => {
+    const { data } = await axios.post(`${apiUrl}/login`, { login, password });
+    return data;
+  }
+);
+
+export const nextMove = createAsyncThunk(
+  "nextMove",
+  async ({ name, changes }) => {
+    const { data } = await axios.post(`${apiUrl}/next`, { name, changes });
+    return data;
+  }
+);
 
 const ownCountrySlice = createSlice({
   name: "ownCountry",
@@ -45,7 +53,9 @@ const ownCountrySlice = createSlice({
         );
         state.balance -= 150;
       } else {
-        state.changes = state.changes.filter((item) => item.name !== "Вклад в экологию");
+        state.changes = state.changes.filter(
+          (item) => item.name !== "Вклад в экологию"
+        );
         state.balance += 150;
       }
     },
@@ -59,7 +69,9 @@ const ownCountrySlice = createSlice({
         state.balance -= 500;
       } else {
         state.balance += 500;
-        state.changes = state.changes.filter((item) => item.name !== "Развитие ядерной технологии");
+        state.changes = state.changes.filter(
+          (item) => item.name !== "Развитие ядерной технологии"
+        );
       }
     },
     changeSanction(state, action) {
@@ -84,7 +96,8 @@ const ownCountrySlice = createSlice({
       } else {
         state.balance += type === "Улучшение" ? 150 : 300;
         state.changes = state.changes.filter(
-          (item) => !(item.type === "expense" && item.name === `${type} ${name}`)
+          (item) =>
+            !(item.type === "expense" && item.name === `${type} ${name}`)
         );
       }
     },
@@ -93,11 +106,17 @@ const ownCountrySlice = createSlice({
       if (count !== 0) {
         state.balance = state.balance + waste - count * 150;
         const index = state.changes.findIndex(
-          (item) => item.type === "expense" && item.name === "Строительство бомб"
+          (item) =>
+            item.type === "expense" && item.name === "Строительство бомб"
         );
         if (index === -1) {
           state.changes.push(
-            { type: "expense", name: "Строительство бомб", cost: count * 150, count: count },
+            {
+              type: "expense",
+              name: "Строительство бомб",
+              cost: count * 150,
+              count: count,
+            },
             { type: "eco", name: "Строительство бомб", cost: -0.6 }
           );
         } else {
@@ -106,7 +125,9 @@ const ownCountrySlice = createSlice({
         }
       } else {
         state.balance += waste;
-        state.changes = state.changes.filter((item) => item.name !== "Строительство бомб");
+        state.changes = state.changes.filter(
+          (item) => item.name !== "Строительство бомб"
+        );
       }
     },
     changeBombing(state, action) {
@@ -165,7 +186,8 @@ export const {
   reset,
 } = ownCountrySlice.actions;
 
-export const selectEco = (state) => state.ownCountry.changes.filter((item) => item.type === "eco");
+export const selectEco = (state) =>
+  state.ownCountry.changes.filter((item) => item.type === "eco");
 export const selectExpense = (state) =>
   state.ownCountry.changes.filter((item) => item.type === "expense");
 

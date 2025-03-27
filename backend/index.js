@@ -37,11 +37,16 @@ let newGeneralInfo = {
 const newCountries = structuredClone(countries);
 let attacks = [];
 
+const corsOptions = {
+  origin: 'http://localhost:3000',  // Или '*' для любого домена (небезопасно!)
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE']
+};
+
 const PORT = process.env.PORT || 4444;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.static(__dirname + "/imgs"));
 
 app.use("/", (req, res, next) => {
@@ -94,6 +99,7 @@ app.post("/next", (req, res) => {
 
       case "sanction":
         newCountries[change.to].sanctionsFrom.push(name);
+        newCountries[change.to].balance -= 40
         break;
 
       case "atack":

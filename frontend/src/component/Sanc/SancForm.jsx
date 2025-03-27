@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeSanction } from "../features/ownCountrySlice";
-import useExcludeSelect from "../extra/useExcludeSelect";
+import { changeSanction } from "../../features/ownCountrySlice";
+import useExcludeSelect from "../../extra/useExcludeSelect";
 
 const SancForm = () => {
   const dispatch = useDispatch();

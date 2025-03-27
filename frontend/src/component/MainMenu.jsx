@@ -1,11 +1,11 @@
 import React from "react";
-import CountryNav from "../components/CountryNav";
-import NuclerTech from "../components/NuclerTech";
-import Ecology from "../components/Ecology";
-import Sanc from "../components/Sanc";
-import Transfer from "../components/Transfer";
-import Decrees from "../components/Decrees";
-import CityGroup from "../components/CityGroup";
+import CountryNav from "../component/CountryNav";
+import NuclerTech from "../component/Panels/NuclerTech";
+import Ecology from "../component/Panels/Ecology";
+import Sanc from "../component/Sanc/Sanc";
+import Transfer from "../component/Panels/Transfer";
+import Decrees from "../component/Panels/Decrees";
+import CityGroup from "./City/CityGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { nextMove, updateInfo } from "../features/ownCountrySlice";
 

@@ -1,8 +1,8 @@
 import React from "react";
-import EcologyGraph from "../components/EcologyGraph";
-import CountryGraph from "../components/CountryGraph";
+import EcologyGraph from "../component/Graphic/EcologyGraph";
+import CountryGraph from "../component/Graphic/CountryGraph";
 import { useSelector } from "react-redux";
-import AllCountriesGraph from "../components/AllCountriesGraph";
+import AllCountriesGraph from "../component/Graphic/AllCountriesGraph";
 
 const colors = [
   "#59D5E0",

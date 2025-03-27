@@ -1,7 +1,7 @@
 import React from "react";
 import SancInfo from "./SancInfo";
 import SancForm from "./SancForm";
-import PanelHeader from "./PanelHeader";
+import PanelHeader from "../PanelHeader";
 
 const Sanc = () => {
   return (

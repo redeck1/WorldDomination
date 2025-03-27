@@ -9,7 +9,7 @@ const COUNTRIES = {
   Греция: ["Афины", "Салоники", "Патры", "Лариса"],
 };
 
-export const numPlayers = 8;
+export const numPlayers = 2;
 
 function Country(name, citiesName) {
   this.name = name;
@@ -37,28 +37,10 @@ function Country(name, citiesName) {
 
 const countries = Object.keys(COUNTRIES)
   .slice(0, numPlayers)
-  .reduce((prev, curr) => ({ ...prev, [curr]: new Country(curr, COUNTRIES[curr]) }), {});
-
-/*
-{США: Country {
-  name: 'США',
-  balance: 1000,
-  meanLiveLvl: 54,
-  isHaveNuclearTech: false,
-  bombs: 0,
-  sanctionsFrom: [],
-  cities: [
-    {
-      name: 'Вашингтон',
-      liveLvl: 54,
-      profit: 200,
-      growth: 30,
-      isHaveShield: false,
-      isAlive: true
-    },
-    ...]
-} ...}
-*/
+  .reduce(
+    (prev, curr) => ({ ...prev, [curr]: new Country(curr, COUNTRIES[curr]) }),
+    {}
+  );
 
 //Функция для подготовки данных к отправке пользователю (Нужны не все поля)
 export function prepareCountries(countries) {
@@ -89,11 +71,18 @@ export function attack(country, cityIndex) {
 }
 
 export function next(country, ecologyLvl) {
-  country.balance += Math.round(country.cities.reduce((sum, city) => sum + city.profit, 0));
+  country.balance += Math.round(
+    country.cities.reduce((sum, city) => sum + city.profit, 0)
+  );
   country.cities = country.cities
-    .map((city) => ({ ...city, liveLvl: Math.round((city.growth * ecologyLvl) / 100) }))
+    .map((city) => ({
+      ...city,
+      liveLvl: Math.round((city.growth * ecologyLvl) / 100),
+    }))
     .map((city) => ({ ...city, profit: 3 * city.liveLvl }));
-  country.meanLiveLvl = Math.round(country.cities.reduce((sum, city) => sum + city.liveLvl, 0) / 4);
+  country.meanLiveLvl = Math.round(
+    country.cities.reduce((sum, city) => sum + city.liveLvl, 0) / 4
+  );
   country.isComplete = false;
   return country;
 }

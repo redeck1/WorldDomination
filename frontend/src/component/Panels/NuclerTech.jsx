@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import PanelHeader from "./PanelHeader";
+import PanelHeader from "../PanelHeader";
 import { useDispatch, useSelector } from "react-redux";
-import { buildBombs, changeTech } from "../features/ownCountrySlice";
+import { buildBombs, changeTech } from "../../features/ownCountrySlice";
 
 let NuclerTech = () => {
   const dispatch = useDispatch();

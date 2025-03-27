@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_API_URL;
 const initialState = {
   status: "idle",
   items: [
@@ -42,10 +43,13 @@ const initialState = {
   ],
 };
 
-export const fetchCountriesData = createAsyncThunk("countries/fetchCountriesData", async () => {
-  const { data } = await axios.get("http://localhost:4444/countries");
-  return data;
-});
+export const fetchCountriesData = createAsyncThunk(
+  "countries/fetchCountriesData",
+  async () => {
+    const { data } = await axios.get(`${apiUrl}/countries`);
+    return data;
+  }
+);
 
 const countriesSlice = createSlice({
   name: "countries",
