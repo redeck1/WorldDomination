@@ -19,19 +19,26 @@ Click the “Copy” button to copy the URL of the repository to your clipboard.
 Now Open the terminal or command prompt and navigate to the directory where you want to store the React project. Then, run the following command to clone the repository:
 `git clone https://github.com/redeck1/WorldDomination.git`
 
-## 2. Navigate to the project directory:
-After the repository is cloned, navigate to the project directory using the following command:
+## 2. Run express app:
+After the repository is cloned, navigate to the project directory and run the following commands:
 
+`cd WorldDomination/backend`
+`npm i`
+And run command `npm run dev`
+this will start the server
+
+## 3. Navigate to the frontend project directory:
+open another terminal and go to WorldDomination/frontend
 `cd WorldDomination/frontend`
 
-## 3. Install dependencies:
+## 4. Install dependencies:
 Once you’re inside the project directory, run the following command to install the dependencies required for the project:
 
 `npm i`
 
 This command will read the package.json file in the repository and download all of the dependencies listed there.
 
-## 4. Start the development server:
+## 5. Start the development server:
 Use this command in the terminal
 
 `npm start`
