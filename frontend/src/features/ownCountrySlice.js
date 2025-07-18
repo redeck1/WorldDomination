@@ -10,6 +10,7 @@ const initialState = {
   name: null,
   meanLiveLvl: null,
   balance: null,
+  transferSum: null,
   bombs: null,
   isHaveNuclearTech: null,
   nuclearTech: false, // развивать ли ядерную технологию
@@ -145,6 +146,17 @@ const ownCountrySlice = createSlice({
         );
       }
     },
+    changeTransfer(state, action) {
+      const { transfers } = action.payload;
+      state.changes.push({
+        type: "transfer",
+        transfers: transfers,
+      });
+      let sum = 0;
+      Object.values(transfers).map((s) => (sum += Number(s)));
+      state.balance += state.transferSum - sum;
+      state.transferSum = sum;
+    },
     reset() {
       return initialState;
     },
@@ -183,6 +195,7 @@ export const {
   changeCity,
   buildBombs,
   changeBombing,
+  changeTransfer,
   reset,
 } = ownCountrySlice.actions;
 

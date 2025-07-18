@@ -9,12 +9,13 @@ const COUNTRIES = {
   Греция: ["Афины", "Салоники", "Патры", "Лариса"],
 };
 
-export const numPlayers = 2;
+export const numPlayers = 4;
 
 function Country(name, citiesName) {
   this.name = name;
   this.isComplete = false;
   this.balance = 1000;
+  this.transferSum = 0;
   this.meanLiveLvl = 54;
   this.isHaveNuclearTech = false;
   this.bombs = 0;
