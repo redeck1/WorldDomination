@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset } from "../features/ownCountrySlice";
+import { logout } from "../features/ownCountrySlice";
 
 const Navbar = () => {
   const round = useSelector((state) => state.ownCountry.round);
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const signOut = () => {
     navigate("/");
-    dispatch(reset());
+    dispatch(logout());
   };
 
   return (

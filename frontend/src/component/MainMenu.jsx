@@ -12,6 +12,7 @@ import { nextMove, updateInfo } from "../features/ownCountrySlice";
 const MainMenu = () => {
   const countryName = useSelector((state) => state.ownCountry.name);
   const changes = useSelector((state) => state.ownCountry.changes);
+  const password = useSelector(state => state.ownCountry.password)
   const dispatch = useDispatch();
 
   return (
@@ -42,7 +43,7 @@ const MainMenu = () => {
         <button
           type="button"
           className="btn btn-outline-primary btn-lg fw-bold"
-          onClick={() => dispatch(nextMove({ name: countryName, changes: changes }))}
+          onClick={() => dispatch(nextMove({ name: countryName, password: password,changes: changes }))}
         >
           Закончить ход
         </button>

@@ -5,6 +5,7 @@ import countries, {
     next,
     numPlayers,
     attack,
+    COUNTRIES,
 } from "./countries.js";
 import { existsSync } from "fs";
 
@@ -15,14 +16,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const PASSWORDS = {
-    США: "pSJzymBZNOEzALyZT1t3CMmUyMSIZ1kc",
-    "Сев. Корея": "ayRGhJRAwTsjf8RDC4nQbXTF8AvM4tZU",
-    Ирак: "REjGyTgMtiJZo5xIW9B9Wz68L69PrfpX",
-    Греция: "rez7cnTVHRr7mv2uVRPgUSd9MNGqZ819",
-    Китай: "anOMx1SbpqO7lcneEu6AodSkA4L5miMz",
-    Франция: "cXQ6RHYqThWgVtrMXASVjXqwVcWB5P03",
-    Германия: "avWtZdtFO0HdpAOU2dOgDxxFkJRGIZsx",
-    Россия: "HpEJC4YfPOHcpVI3g7dsJ59gFe3Z7cVG",
+    США: "p",
+    Россия: "HpEJC4YfPOHcpVI3",
+    Китай: "anOMx1SbpqO7lcne",
+    "Сев. Корея": "ayRGhJRAwTsjf8RD",
+    Германия: "avWtZdtFO0HdpAOU",
+    Франция: "cXQ6RHYqThWgVtrM",
+    Ирак: "REjGyTgMtiJZo5xI",
+    Греция: "rez7cnTVHRr7mv2u",
 };
 
 let generalInfo = {
@@ -46,13 +47,13 @@ const newCountries = structuredClone(countries);
 let attacks = [];
 
 const corsOptions = {
-    origin: "http://localhost:3000", // Или '*' для любого домена (небезопасно!)
+    origin: "http://localhost:3000", // Или '*' для любого домена
     methods: ["GET", "POST", "DELETE", "UPDATE"],
 };
 
 const PORT = process.env.PORT || 4444;
 
-const clients = new Set();
+const clients = {};
 
 const app = express();
 app.use(express.json());
@@ -71,28 +72,45 @@ app.use("/", (req, res, next) => {
     next();
 });
 
-//SSE endpoint
+//SSE endpoint (GET)
 app.get("/game-update", (req, res) => {
+    const password = req.query.password;
+    const countryName = req.query.country_name;
+    const realCountryName = Object.keys(PASSWORDS).find(
+        (k) => PASSWORDS[k] === password
+    );
+    if (
+        !Object.values(PASSWORDS).includes(password) ||
+        countryName !== realCountryName
+    )
+        return res.status(403).json("Доступ запрещен");
+
+    console.log(countryName);
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
     });
 
-    clients.add(res);
-
-    res.write(`data: ${JSON.stringify({ msg: "hello" })}\n\n`);
+    clients[countryName] = res;
 
     req.on("close", () => {
-        clients.delete(res);
+        delete clients.countryName;
     });
 });
 
-const broadcastGameUpdate = (gameState) => {
-    clients.forEach((client) => {
+const broadcastGameUpdate = () => {
+    for (const key in clients) {
+        console.log("Данные о новом раунде отошли", key);
+        const client = clients[key];
         client.write("event: gameUpdate\n");
-        client.write(`data: ${JSON.stringify(gameState)}\n\n`);
-    });
+        client.write(
+            `data: ${JSON.stringify({
+                countries: prepareCountries(countries),
+                ownCountry: { ...countries[key], ...generalInfo },
+            })}\n\n`
+        );
+    }
 };
 
 app.get("/countries", (req, res) => {
@@ -100,18 +118,33 @@ app.get("/countries", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    const [login, password] = [req.body.login, req.body.password];
-    if (password !== PASSWORDS[login] && password !== "123123")
-        return res.status(400).json("Неверный пароль");
+    const password = req.body.password;
+
+    if (!Object.values(PASSWORDS).includes(password))
+        return res.status(403).json("Неверный код");
+
+    const countryName = Object.keys(PASSWORDS).find(
+        (k) => PASSWORDS[k] === password
+    );
     return res.status(200).json({
-        auth: true,
-        ...countries[login],
+        password,
+        ...countries[countryName],
         ...generalInfo,
     });
 });
 
 app.post("/next", (req, res) => {
-    const { name, changes } = req.body;
+    const { name, password, changes } = req.body;
+
+    const realCountryName = Object.keys(PASSWORDS).find(
+        (k) => PASSWORDS[k] === password
+    );
+    if (
+        !Object.values(PASSWORDS).includes(password) ||
+        name !== realCountryName
+    )
+        return res.status(403).json("Доступ запрещен");
+
     if (countries[name].isComplete) {
         return res.status(400).json("Эта страна уже завершила ход");
     } else {
@@ -212,14 +245,15 @@ app.post("/next", (req, res) => {
             ],
         };
 
-        broadcastGameUpdate({
-            countries: prepareCountries(countries),
-            ownCountry: { ...countries[name], ...generalInfo },
-        });
+        broadcastGameUpdate();
+        return res
+            .status(200)
+            .json({ mesage: "final_turn_processed", isLast: true });
     }
-    return res.status(200).json("data accepted");
+    return res.status(200).json({ message: "data accepted", isLast: false });
 });
 
+//Убрать
 app.get("/update_info", (req, res) => {
     const countryName = req.query.country_name;
     return res.status(200).json({

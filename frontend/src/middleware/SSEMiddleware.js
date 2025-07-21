@@ -1,29 +1,58 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const gameSseMiddleware = (store) => {
-    let isInitialized = false;
+    let eventSource = null;
 
     return (next) => (action) => {
-        // Пропускаем все действия через цепочку
-        const result = next(action);
-
-        // Инициализируем SSE только при старте приложения
-        if (!isInitialized) {
-            console.log("Инициализация SSE подключения");
-            isInitialized = true;
-            const eventSource = new EventSource(`${apiUrl}/game-update`);
+        // Подключение к SSE
+        const connect = (countryName, password) => {
+            eventSource = new EventSource(
+                `${apiUrl}/game-update?country_name=${countryName}&password=${password}`
+            );
 
             eventSource.addEventListener("gameUpdate", (event) => {
                 const data = JSON.parse(event.data);
-                console.log(data);
-                //   store.dispatch({ type: 'UPDATE_GAME_STATE', payload: data });
+                store.dispatch({
+                    type: "countries/setCountries",
+                    payload: data.countries,
+                });
+                store.dispatch({
+                    type: "ownCountry/setOwnCountry",
+                    payload: data.ownCountry,
+                });
+
+                alert("Новый раунд!");
             });
 
-            eventSource.onerror = () => {
-                console.error("SSE ошибка соединения");
+            eventSource.onerror = (error) => {
+                console.error("SSE connection error:", error);
+                eventSource?.close();
             };
+        };
+
+        // Обработка действий
+        switch (action.type) {
+            case "checkAuth/fulfilled":
+                if (!eventSource) {
+                    console.log("Authenticated, establishing SSE connection");
+                    connect(action.payload.name, action.payload.password);
+                }
+                break;
+
+            case "ownCountry/logout":
+                if (eventSource) {
+                    console.log("Resetting, closing SSE connection");
+                    eventSource.close();
+                    eventSource = null;
+                } else {
+                    console.log("no EventSource", eventSource);
+                }
+                break;
+
+            default:
+                break;
         }
 
-        return result;
+        return next(action);
     };
 };
