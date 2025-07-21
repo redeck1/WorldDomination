@@ -2,6 +2,7 @@ import React from "react";
 import EcologyGraph from "../component/Graphic/EcologyGraph";
 import CountryGraph from "../component/Graphic/CountryGraph";
 import { useSelector } from "react-redux";
+import { Navigate  } from "react-router-dom";
 import AllCountriesGraph from "../component/Graphic/AllCountriesGraph";
 
 const colors = [
@@ -17,6 +18,11 @@ const colors = [
 
 const Statistics = () => {
   const countries = useSelector((state) => state.countries.items);
+  const isAuth = useSelector((state) => state.ownCountry.password) !== null;
+
+  if (!isAuth) {
+        return <Navigate to="/" replace />; 
+      }
 
   return (
     <>

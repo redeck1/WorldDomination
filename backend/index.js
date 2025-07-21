@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import countries, {
     prepareCountries,
     next,
@@ -26,6 +27,8 @@ const PASSWORDS = {
     Греция: "rez7cnTVHRr7mv2u",
 };
 
+const sancValue = 40;
+
 let generalInfo = {
     completed: 0,
     round: 1,
@@ -49,6 +52,7 @@ let attacks = [];
 const corsOptions = {
     origin: "http://localhost:3000", // Или '*' для любого домена
     methods: ["GET", "POST", "DELETE", "UPDATE"],
+    credentials: true,
 };
 
 const PORT = process.env.PORT || 4444;
@@ -58,6 +62,7 @@ const clients = {};
 const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.static(__dirname + "/imgs"));
 
 app.use("/", (req, res, next) => {
@@ -74,7 +79,7 @@ app.use("/", (req, res, next) => {
 
 //SSE endpoint (GET)
 app.get("/game-update", (req, res) => {
-    const password = req.query.password;
+    const password = req.cookies.session;
     const countryName = req.query.country_name;
     const realCountryName = Object.keys(PASSWORDS).find(
         (k) => PASSWORDS[k] === password
@@ -126,6 +131,13 @@ app.post("/login", (req, res) => {
     const countryName = Object.keys(PASSWORDS).find(
         (k) => PASSWORDS[k] === password
     );
+
+    res.cookie("session", password, {
+        httpOnly: true,
+        // secure: true, // Только HTTPS!
+        sameSite: "Strict",
+    });
+
     return res.status(200).json({
         password,
         ...countries[countryName],
@@ -166,7 +178,11 @@ app.post("/next", (req, res) => {
 
             case "sanction":
                 newCountries[change.to].sanctionsFrom.push(name);
-                newCountries[change.to].balance -= 40;
+                if (newCountries[change.to].balance - sancValue > 0) {
+                    newCountries[change.to].balance -= 40;
+                } else {
+                    newCountries[change.to].balance = 0;
+                }
                 break;
 
             case "atack":

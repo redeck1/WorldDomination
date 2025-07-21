@@ -7,7 +7,10 @@ export const gameSseMiddleware = (store) => {
         // Подключение к SSE
         const connect = (countryName, password) => {
             eventSource = new EventSource(
-                `${apiUrl}/game-update?country_name=${countryName}&password=${password}`
+                `${apiUrl}/game-update?country_name=${countryName}`,
+                {
+                    withCredentials: true,
+                }
             );
 
             eventSource.addEventListener("gameUpdate", (event) => {

@@ -23,9 +23,13 @@ const initialState = {
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const checkAuth = createAsyncThunk("checkAuth", async ({ password }) => {
-    const { data } = await axios.post(`${apiUrl}/login`, {
-        password,
-    });
+    const { data } = await axios.post(
+        `${apiUrl}/login`,
+        {
+            password,
+        },
+        { withCredentials: true }
+    );
     return data;
 });
 

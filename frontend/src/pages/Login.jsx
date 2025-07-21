@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { checkAuth } from "../features/ownCountrySlice";
 import withLoader from "../extra/ButtonWithLoading";
 
 function Login() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const authLoading = useSelector((state) => state.ownCountry.status) === "loading";
   const countriesLoading = useSelector((state) => state.countries.status) === "loading";
   const isAuth = useSelector((state) => state.ownCountry.password) !== null
@@ -18,7 +17,7 @@ function Login() {
   };
 
   if (isAuth) {
-    navigate("/home");
+    return <Navigate to="/home" replace />; 
   }
 
   if (countriesLoading) {

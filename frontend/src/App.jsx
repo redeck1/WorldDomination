@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./component/NavBar";
 import Home from "./pages/Home";
 import Statistics from "./pages/Statistics";
@@ -33,6 +33,7 @@ function App() {
         <Route path="" exact="true" element={<Login />} />
         <Route path="home" element={Navigation(Home)} />
         <Route path="statistics" element={Navigation(Statistics)} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
