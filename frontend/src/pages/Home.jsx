@@ -14,6 +14,8 @@ const Home = () => {
     const isComplete = useSelector((state) => state.ownCountry.isComplete);
     const countryName = useSelector((state) => state.ownCountry.name);
     const isAuth = useSelector((state) => state.ownCountry.isAuth);
+    const countriesLoading =
+        useSelector((state) => state.countries.status) === "loading";
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
@@ -36,6 +38,16 @@ const Home = () => {
 
     if (!isAuth) {
         return <Navigate to="/" replace />;
+    }
+
+    if (countriesLoading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center h-100 w-100 position-fixed">
+                <div className="spinner-border" role="status">
+                    <span className="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        );
     }
 
     return (

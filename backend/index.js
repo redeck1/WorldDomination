@@ -18,7 +18,7 @@ const __dirname = dirname(__filename);
 
 const PASSWORDS = {
     США: "p",
-    Россия: "HpEJC4YfPOHcpVI3",
+    Россия: "h",
     Китай: "anOMx1SbpqO7lcne",
     "Сев. Корея": "ayRGhJRAwTsjf8RD",
     Германия: "avWtZdtFO0HdpAOU",
@@ -95,7 +95,6 @@ app.get("/game-update", (req, res) => {
     )
         return res.status(403).json("Доступ запрещен");
 
-    console.log(countryName);
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -103,9 +102,11 @@ app.get("/game-update", (req, res) => {
     });
 
     clients[countryName] = res;
+    console.log("кол-во подключений[откр]:", Object.keys(clients).length);
 
     req.on("close", () => {
-        delete clients.countryName;
+        delete clients[countryName];
+        console.log("кол-во подключений[закр]:", Object.keys(clients).length);
     });
 });
 
@@ -188,7 +189,7 @@ app.post("/next", (req, res) => {
         switch (change.type) {
             case "eco":
                 let lvl = newGeneralInfo.ecologyLvl.at(-1).lvl;
-                if (lvl + change.cost > 0) {
+                if (lvl + change.cost > 1) {
                     lvl += change.cost;
                 } else {
                     lvl = 1;
@@ -211,7 +212,11 @@ app.post("/next", (req, res) => {
                 break;
 
             case "expense":
-                newCountries[name].balance -= change.cost;
+                if (newCountries[name].balance - change.cost < 0) {
+                    res.status(400).send("Баланс страны меньше нуля");
+                } else {
+                    newCountries[name].balance -= change.cost;
+                }
 
                 if (change.name === "Развитие ядерной технологии") {
                     newCountries[name].isHaveNuclearTech = true;
@@ -289,7 +294,6 @@ app.post("/next", (req, res) => {
     return res.status(200).json({ message: "data accepted", isLast: false });
 });
 
-//Убрать
 app.get("/update_info", (req, res) => {
     const countryName = req.query.country_name;
     return res.status(200).json({
@@ -304,6 +308,58 @@ app.get("/imgs/:name", (req, res) => {
         res.sendFile(__dirname + `/imgs/${name}`);
     }
     res.sendFile(__dirname + `/imgs/NotFound.png`);
+});
+
+app.post("/transfer", (req, res) => {
+    const { countryName, transfers } = req.body;
+
+    const password = req.cookies.session;
+
+    const realCountryName = Object.keys(PASSWORDS).find(
+        (k) => PASSWORDS[k] === password
+    );
+    if (
+        !Object.values(PASSWORDS).includes(password) ||
+        countryName !== realCountryName
+    )
+        return res.status(403).json("Доступ запрещен");
+
+    for (let to in transfers) {
+        if (!Object.keys(countries).includes(to)) {
+            return res.status(400).send("Страны с указанным именем нет");
+        }
+        const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);
+        console.log(sum);
+        if (countries[countryName].balance < sum) {
+            return res.status(400).send("Недостаточно средств");
+        }
+    }
+
+    for (const to in transfers) {
+        const sum = transfers[to];
+        if (sum === 0) break;
+        countries[countryName].balance -= sum;
+        newCountries[countryName].balance -= sum;
+        countries[to].balance += sum;
+        newCountries[to].balance += sum;
+
+        clients[to]?.write("event: transfer\n");
+        clients[to]?.write(
+            `data: ${JSON.stringify({
+                ownCountry: { ...countries[countryName], ...generalInfo },
+                from: countryName,
+                sum,
+            })}\n\n`
+        );
+    }
+
+    clients[countryName]?.write("event: transfer\n");
+    clients[countryName]?.write(
+        `data: ${JSON.stringify({
+            ownCountry: { ...countries[countryName], ...generalInfo },
+        })}\n\n`
+    );
+    return res.status(200);
 });
 
 app.listen(PORT, (err) => {

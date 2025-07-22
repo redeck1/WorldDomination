@@ -8,8 +8,6 @@ function Login() {
     const dispatch = useDispatch();
     const authLoading =
         useSelector((state) => state.ownCountry.status) === "loading";
-    const countriesLoading =
-        useSelector((state) => state.countries.status) === "loading";
     const isAuth = useSelector((state) => state.ownCountry.isAuth);
     const [code, setCode] = useState("");
 
@@ -20,16 +18,6 @@ function Login() {
 
     if (isAuth) {
         return <Navigate to="/home" replace />;
-    }
-
-    if (countriesLoading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center h-100 w-100 position-fixed">
-                <div className="spinner-border" role="status">
-                    <span className="visually-hidden">Загрузка...</span>
-                </div>
-            </div>
-        );
     }
 
     const ButtonWithLoader = withLoader((props) => {

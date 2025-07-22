@@ -1,31 +1,41 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PanelHeader from "../PanelHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { changeTransfer, selectExclude } from "../../features/ownCountrySlice";
+import axios from "axios";
 
 const Transfer = () => {
     const countryName = useSelector((state) => state.ownCountry.name);
     const countries = useSelector((state) => selectExclude(state, countryName));
     const balance = useSelector((state) => state.ownCountry.balance);
-    const [transfers, setTransfers] = useState(
+    const [rawTransfers, setRawTransfers] = useState(
         countries.reduce((obj, item) => ({ ...obj, [item.name]: 0 }), {})
     );
     const dispatch = useDispatch();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-    const transferSubmit = (event) => {
+    const transfers = useMemo(() => {
+        const result = {};
+        for (const countryName in rawTransfers) {
+            result[countryName] = Math.min(
+                Math.max(0, rawTransfers[countryName]),
+                balance
+            );
+        }
+        return result;
+    }, [rawTransfers, balance]);
+
+    const transferSubmit = async (event) => {
         event.preventDefault();
         console.log(transfers);
+        const { data } = await axios.post(
+            `${apiUrl}/transfer`,
+            { countryName, transfers },
+            { withCredentials: true }
+        );
+        console.log(data);
         // dispatch(changeTransfer({ transfers }));
-    };
-
-    const handleBlur = (value, countryName) => {
-        if (value < 0) {
-            setTransfers({ ...transfers, [countryName]: 0 });
-        } else if (value > balance) {
-            setTransfers({ ...transfers, [countryName]: balance });
-        }
-        setTimeout(() => dispatch(changeTransfer({ transfers })), 500);
     };
 
     return (
@@ -35,15 +45,16 @@ const Transfer = () => {
                 {countries.map((country) => (
                     <div className="row mb-2" key={country.name}>
                         <div className="col-4">{country.name}</div>
-                        <div className="col-3">
+                        <div className="col-4">
                             <input
                                 onChange={(e) =>
-                                    setTransfers({
-                                        ...transfers,
-                                        [country.name]: e.target.value,
+                                    setRawTransfers({
+                                        ...rawTransfers,
+                                        [country.name]:
+                                            parseInt(e.target.value) || 0,
                                     })
                                 }
-                                className="form-control py-0"
+                                className="form-control py-0 text-center"
                                 type="number"
                                 id={"to" + country.name}
                                 value={transfers[country.name]}

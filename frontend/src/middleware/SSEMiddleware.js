@@ -1,4 +1,5 @@
-import { fetchCountriesData } from "../features/countriesSlice";
+import { fetchCountriesData, setCountries } from "../features/countriesSlice";
+import { setOwnCountry } from "../features/ownCountrySlice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,16 +18,16 @@ export const gameSseMiddleware = (store) => {
 
             eventSource.addEventListener("gameUpdate", (event) => {
                 const data = JSON.parse(event.data);
-                store.dispatch({
-                    type: "countries/setCountries",
-                    payload: data.countries,
-                });
-                store.dispatch({
-                    type: "ownCountry/setOwnCountry",
-                    payload: data.ownCountry,
-                });
+                store.dispatch(setCountries(data.countries));
+                store.dispatch(setOwnCountry(data.ownCountry));
 
                 alert("Новый раунд!");
+            });
+
+            eventSource.addEventListener("transfer", (event) => {
+                const data = JSON.parse(event.data);
+                store.dispatch(setOwnCountry(data.ownCountry));
+                if (data.from) alert(`Перевод ${data.sum} от ${data.from}`);
             });
 
             eventSource.onerror = (error) => {
