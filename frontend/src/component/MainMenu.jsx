@@ -43,7 +43,7 @@ const MainMenu = () => {
         <button
           type="button"
           className="btn btn-outline-primary btn-lg fw-bold"
-          onClick={() => dispatch(nextMove({ name: countryName, password: password,changes: changes }))}
+          onClick={() => dispatch(nextMove({ name: countryName,changes: changes }))}
         >
           Закончить ход
         </button>

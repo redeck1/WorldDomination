@@ -18,7 +18,7 @@ const colors = [
 
 const Statistics = () => {
   const countries = useSelector((state) => state.countries.items);
-  const isAuth = useSelector((state) => state.ownCountry.password) !== null;
+  const isAuth = useSelector((state) => state.ownCountry.isAuth);
 
   if (!isAuth) {
         return <Navigate to="/" replace />; 

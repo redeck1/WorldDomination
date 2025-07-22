@@ -66,13 +66,18 @@ app.use(cookieParser());
 app.use(express.static(__dirname + "/imgs"));
 
 app.use("/", (req, res, next) => {
-    const now = new Date();
-    const hour = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    const milliseconds = now.getMilliseconds();
-    const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${req.method} ${req.url}`;
-    console.log(data);
+    res.on("finish", () => {
+        const now = new Date();
+        const hour = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+        const milliseconds = now.getMilliseconds();
+        const url = decodeURIComponent(req.url);
+        const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${
+            req.method
+        } ${url} -> ${res.statusCode} ${res.statusMessage || ""}`;
+        console.log(data);
+    });
 
     next();
 });
@@ -139,14 +144,29 @@ app.post("/login", (req, res) => {
     });
 
     return res.status(200).json({
-        password,
+        isAuth: true,
         ...countries[countryName],
         ...generalInfo,
     });
 });
 
+app.post("/logout", (req, res) => {
+    try {
+        res.clearCookie("session", {
+            httpOnly: true,
+            // secure: true, // Только HTTPS!
+            sameSite: "Strict",
+        });
+        return res.status(200).json("logout");
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json("Ошибка");
+    }
+});
+
 app.post("/next", (req, res) => {
-    const { name, password, changes } = req.body;
+    const { name, changes } = req.body;
+    const password = req.cookies.session;
 
     const realCountryName = Object.keys(PASSWORDS).find(
         (k) => PASSWORDS[k] === password

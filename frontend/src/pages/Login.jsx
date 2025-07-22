@@ -8,7 +8,7 @@ function Login() {
   const dispatch = useDispatch();
   const authLoading = useSelector((state) => state.ownCountry.status) === "loading";
   const countriesLoading = useSelector((state) => state.countries.status) === "loading";
-  const isAuth = useSelector((state) => state.ownCountry.password) !== null
+  const isAuth = useSelector((state) => state.ownCountry.isAuth)
   const [code, setCode] = useState("");
 
   const submitHandler = async (event) => {

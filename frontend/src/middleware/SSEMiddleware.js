@@ -1,3 +1,5 @@
+import { fetchCountriesData } from "../features/countriesSlice";
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const gameSseMiddleware = (store) => {
@@ -5,7 +7,7 @@ export const gameSseMiddleware = (store) => {
 
     return (next) => (action) => {
         // Подключение к SSE
-        const connect = (countryName, password) => {
+        const connect = (countryName) => {
             eventSource = new EventSource(
                 `${apiUrl}/game-update?country_name=${countryName}`,
                 {
@@ -36,20 +38,17 @@ export const gameSseMiddleware = (store) => {
         // Обработка действий
         switch (action.type) {
             case "checkAuth/fulfilled":
-                if (!eventSource) {
-                    console.log("Authenticated, establishing SSE connection");
-                    connect(action.payload.name, action.payload.password);
+                if (eventSource) {
+                    eventSource.close();
                 }
+                console.log("Authenticated, establishing SSE connection");
+                connect(action.payload.name);
+                store.dispatch(fetchCountriesData());
                 break;
 
-            case "ownCountry/logout":
-                if (eventSource) {
-                    console.log("Resetting, closing SSE connection");
-                    eventSource.close();
-                    eventSource = null;
-                } else {
-                    console.log("no EventSource", eventSource);
-                }
+            case "logout/fulfilled":
+                eventSource?.close();
+                eventSource = null;
                 break;
 
             default:

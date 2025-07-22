@@ -3,7 +3,7 @@ import axios from "axios";
 
 const initialState = {
     isComplete: false,
-    password: null,
+    isAuth: false,
     status: "idle",
     round: null,
     ecologyLvl: [],
@@ -35,15 +35,27 @@ export const checkAuth = createAsyncThunk("checkAuth", async ({ password }) => {
 
 export const nextMove = createAsyncThunk(
     "nextMove",
-    async ({ name, password, changes }) => {
-        const { data } = await axios.post(`${apiUrl}/next`, {
-            name,
-            password,
-            changes,
-        });
+    async ({ name, changes }) => {
+        const { data } = await axios.post(
+            `${apiUrl}/next`,
+            {
+                name,
+                changes,
+            },
+            { withCredentials: true }
+        );
         return data;
     }
 );
+
+export const logout = createAsyncThunk("logout", async ({ name }) => {
+    const { data } = await axios.post(
+        `${apiUrl}/logout`,
+        { name },
+        { withCredentials: true }
+    );
+    return data;
+});
 
 const ownCountrySlice = createSlice({
     name: "ownCountry",
@@ -181,9 +193,6 @@ const ownCountrySlice = createSlice({
             state.balance += state.transferSum - sum;
             state.transferSum = sum;
         },
-        logout(state, action) {
-            return initialState;
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -210,6 +219,12 @@ const ownCountrySlice = createSlice({
             })
             .addCase(nextMove.rejected, (state, action) => {
                 state.status = "error";
+            })
+            .addCase(logout.fulfilled, (state, action) => {
+                return initialState;
+            })
+            .addCase(logout.rejected, (state) => {
+                console.log("Невозможно сбросить сессию");
             });
     },
 });
@@ -223,7 +238,6 @@ export const {
     buildBombs,
     changeBombing,
     changeTransfer,
-    logout,
 } = ownCountrySlice.actions;
 
 export const selectEco = (state) =>

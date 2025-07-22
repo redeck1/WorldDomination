@@ -1,19 +1,20 @@
-import React, {  useState } from "react";
+import React, {  useState, useEffect } from "react";
 import SideMenu from "../component/SideMenu/SideMenu";
 import MainMenu from "../component/MainMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setCountries } from "../features/countriesSlice";
-import { setOwnCountry } from "../features/ownCountrySlice";
+import { logout, setOwnCountry } from "../features/ownCountrySlice";
 import axios from "axios";
 import withLoader from "../extra/ButtonWithLoading";
 import { Navigate  } from "react-router-dom";
+import { fetchCountriesData } from "../features/countriesSlice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Home = () => {
     const isComplete = useSelector((state) => state.ownCountry.isComplete);
     const countryName = useSelector((state) => state.ownCountry.name);
-    const isAuth = useSelector((state) => state.ownCountry.password) !== null;
+    const isAuth = useSelector((state) => state.ownCountry.isAuth)
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
@@ -36,7 +37,7 @@ const Home = () => {
     
     if (!isAuth) {
       return <Navigate to="/" replace />; 
-    }
+    } 
 
     return (
         <div className="container" style={{ maxWidth: 1480 + "px" }}>
