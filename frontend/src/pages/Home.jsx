@@ -48,7 +48,7 @@ const Home = () => {
                             type="button"
                             className="btn btn-primary btn-lg fw-bold mt-4"
                             onClick={updateData}
-                            loading={loading}
+                            loading={loading ? "true" : undefined}
                         />
                     ) : (
                         <MainMenu />

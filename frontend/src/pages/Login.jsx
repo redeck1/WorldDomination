@@ -52,7 +52,7 @@ function Login() {
         <ButtonWithLoader
           className="btn btn-outline-primary"
           type="button"
-          loading={authLoading}
+          loading={authLoading ? "true" : undefined}
           onClick={submitHandler}
         />
       </form>
