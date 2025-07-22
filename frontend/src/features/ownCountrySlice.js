@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+    createAsyncThunk,
+    createSelector,
+    createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -240,9 +244,23 @@ export const {
     changeTransfer,
 } = ownCountrySlice.actions;
 
-export const selectEco = (state) =>
-    state.ownCountry.changes.filter((item) => item.type === "eco");
-export const selectExpense = (state) =>
-    state.ownCountry.changes.filter((item) => item.type === "expense");
+export const selectAttackedCities = createSelector(
+    (state) => state.ownCountry.changes,
+    (changes) => changes.filter((item) => item.type === "atack")
+);
+
+export const selectEco = createSelector(
+    (state) => state.ownCountry.changes,
+    (changes) => changes.filter((item) => item.type === "eco")
+);
+export const selectExpense = createSelector(
+    (state) => state.ownCountry.changes,
+    (changes) => changes.filter((item) => item.type === "expense")
+);
+export const selectExclude = createSelector(
+    (state) => state.countries.items,
+    (_, countryName) => countryName,
+    (items, countryName) => items.filter((item) => item.name !== countryName)
+);
 
 export default ownCountrySlice.reducer;

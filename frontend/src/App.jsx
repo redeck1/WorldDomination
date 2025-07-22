@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./component/NavBar";
 import Home from "./pages/Home";
 import Statistics from "./pages/Statistics";
 import Login from "./pages/Login";
-import { useDispatch } from "react-redux";
 
 function App() {
     const Navigation = (WrappedComponent) => {

@@ -1,19 +1,23 @@
 import React from "react";
 import SideCountry from "./SideCountry";
 import { useSelector } from "react-redux";
-import useExcludeSelect from "../../extra/useExcludeSelect";
+import { selectExclude } from "../../features/ownCountrySlice";
 
 const SideMenu = () => {
-  const thisName = useSelector((state) => state.ownCountry.name);
-  const countries = useExcludeSelect(thisName);
+    const countryName = useSelector((state) => state.ownCountry.name);
+    const countries = useSelector((state) => selectExclude(state, countryName));
 
-  return (
-    <div className="mt-4">
-      {countries.map((country, index) => (
-        <SideCountry country={country} index={index} key={country.name} />
-      ))}
-    </div>
-  );
+    return (
+        <div className="mt-4">
+            {countries.map((country, index) => (
+                <SideCountry
+                    country={country}
+                    index={index}
+                    key={country.name}
+                />
+            ))}
+        </div>
+    );
 };
 
 export default SideMenu;
