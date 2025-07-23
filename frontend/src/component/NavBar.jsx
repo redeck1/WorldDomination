@@ -10,7 +10,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
 
     const signOut = () => {
-        dispatch(logout({ name: countryName }));
+        dispatch(logout());
         return <Navigate to="/" replace />;
     };
 

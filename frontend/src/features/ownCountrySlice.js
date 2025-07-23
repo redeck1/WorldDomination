@@ -52,10 +52,10 @@ export const nextMove = createAsyncThunk(
     }
 );
 
-export const logout = createAsyncThunk("logout", async ({ name }) => {
+export const logout = createAsyncThunk("logout", async () => {
     const { data } = await axios.post(
         `${apiUrl}/logout`,
-        { name },
+        {},
         { withCredentials: true }
     );
     return data;

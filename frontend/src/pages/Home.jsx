@@ -3,7 +3,7 @@ import SideMenu from "../component/SideMenu/SideMenu";
 import MainMenu from "../component/MainMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setCountries } from "../features/countriesSlice";
-import { setOwnCountry } from "../features/ownCountrySlice";
+import { logout, setOwnCountry } from "../features/ownCountrySlice";
 import axios from "axios";
 import withLoader from "../extra/ButtonWithLoading";
 import { Navigate } from "react-router-dom";
@@ -37,6 +37,7 @@ const Home = () => {
     });
 
     if (!isAuth) {
+        dispatch(logout());
         return <Navigate to="/" replace />;
     }
 
