@@ -9,17 +9,20 @@ export const COUNTRIES = {
     Греция: ["Афины", "Салоники", "Патры", "Лариса"],
 };
 
-export const numPlayers = 2;
+export const numPlayers = 5;
 
 function Country(name, citiesName) {
     this.name = name;
     this.isComplete = false;
     this.balance = 1000;
-    this.transferSum = 0;
     this.meanLiveLvl = 54;
     this.isHaveNuclearTech = false;
     this.bombs = 0;
     this.sanctionsFrom = [];
+    this.transfers = Object.keys(COUNTRIES)
+        .slice(0, numPlayers)
+        .filter((item) => item !== name)
+        .reduce((prev, curr) => ({ ...prev, [curr]: 0 }), {});
     this.cities = citiesName.reduce(
         (prev, item) => [
             ...prev,

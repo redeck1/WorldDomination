@@ -1,17 +1,17 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../features/ownCountrySlice";
 
 const Navbar = () => {
     const round = useSelector((state) => state.ownCountry.round);
     const countryName = useSelector((state) => state.ownCountry.countryName);
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const signOut = () => {
-        dispatch(logout({ name: countryName }));
-        return <Navigate to="/" replace />;
+        navigate("/");
+        // dispatch(logout());
     };
 
     return (

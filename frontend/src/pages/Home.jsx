@@ -3,7 +3,7 @@ import SideMenu from "../component/SideMenu/SideMenu";
 import MainMenu from "../component/MainMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setCountries } from "../features/countriesSlice";
-import { setOwnCountry } from "../features/ownCountrySlice";
+import { logout, setOwnCountry } from "../features/ownCountrySlice";
 import axios from "axios";
 import withLoader from "../extra/ButtonWithLoading";
 import { Navigate } from "react-router-dom";
@@ -19,26 +19,33 @@ const Home = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
-    const updateData = async () => {
-        setLoading(true);
-        const { data } = await axios.get(
-            `${apiUrl}/update_info?country_name=${countryName}`
-        );
-        setLoading(false);
-        const ownCountry = data.ownCountry;
-        const countries = data.countries;
-
-        dispatch(setCountries(countries));
-        dispatch(setOwnCountry(ownCountry));
-    };
-
     const ButtonWithLoader = withLoader((props) => {
         return <button {...props}>Обновить</button>;
     });
 
-    if (!isAuth) {
-        return <Navigate to="/" replace />;
-    }
+    (async function initializeAuth() {
+        if (!isAuth) {
+            try {
+                const res = await axios.post(`${apiUrl}/login`, {
+                    withCredentials: true,
+                });
+                if (res.ok) {
+                    const ownCountry = res.data.ownCountry;
+                    const countries = res.data.countries;
+                    dispatch(setOwnCountry(ownCountry));
+                    dispatch(setCountries(countries));
+                } else {
+                    console.log(res);
+                    dispatch(logout());
+                    return <Navigate to="/" replace />;
+                }
+            } catch (err) {
+                console.log("!isAuth error", err);
+                dispatch(logout());
+                return <Navigate to="/" replace />;
+            }
+        }
+    })();
 
     if (countriesLoading) {
         return (
@@ -58,7 +65,6 @@ const Home = () => {
                         <ButtonWithLoader
                             type="button"
                             className="btn btn-primary btn-lg fw-bold mt-4"
-                            onClick={updateData}
                             loading={loading ? "true" : undefined}
                         />
                     ) : (

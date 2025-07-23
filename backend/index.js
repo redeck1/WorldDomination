@@ -129,7 +129,9 @@ app.get("/countries", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    const password = req.body.password;
+    const password = req.body.password || req.cookies.session;
+    console.log("/login password", req.body.password);
+    console.log("/login cookie", req.cookies.session);
 
     if (!Object.values(PASSWORDS).includes(password))
         return res.status(403).json("Неверный код");
@@ -295,10 +297,20 @@ app.post("/next", (req, res) => {
 });
 
 app.get("/update_info", (req, res) => {
-    const countryName = req.query.country_name;
+    // const countryName = req.query.country_name;
+    const password = req.cookies.session;
+
+    const countryName = Object.keys(PASSWORDS).find(
+        (k) => PASSWORDS[k] === password
+    );
+    if (
+        !Object.values(PASSWORDS).includes(password)
+        // countryName !== realCountryName
+    )
+        return res.status(403).json("Доступ запрещен");
     return res.status(200).json({
         countries: prepareCountries(countries),
-        ownCountry: { ...countries[countryName], ...generalInfo },
+        ownCountry: { ...countries[countryName], ...generalInfo, isAuth: true },
     });
 });
 
@@ -312,7 +324,6 @@ app.get("/imgs/:name", (req, res) => {
 
 app.post("/transfer", (req, res) => {
     const { countryName, transfers } = req.body;
-
     const password = req.cookies.session;
 
     const realCountryName = Object.keys(PASSWORDS).find(
@@ -326,10 +337,10 @@ app.post("/transfer", (req, res) => {
 
     for (let to in transfers) {
         if (!Object.keys(countries).includes(to)) {
+            console.log("Попытка перевести денги стране:", to);
             return res.status(400).send("Страны с указанным именем нет");
         }
         const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);
-        console.log(sum);
         if (countries[countryName].balance < sum) {
             return res.status(400).send("Недостаточно средств");
         }
@@ -337,7 +348,7 @@ app.post("/transfer", (req, res) => {
 
     for (const to in transfers) {
         const sum = transfers[to];
-        if (sum === 0) break;
+        if (sum === 0) continue;
         countries[countryName].balance -= sum;
         newCountries[countryName].balance -= sum;
         countries[to].balance += sum;
@@ -346,20 +357,20 @@ app.post("/transfer", (req, res) => {
         clients[to]?.write("event: transfer\n");
         clients[to]?.write(
             `data: ${JSON.stringify({
-                ownCountry: { ...countries[countryName], ...generalInfo },
+                ownCountry: {
+                    ...countries[countryName],
+                    ...generalInfo,
+                },
                 from: countryName,
                 sum,
             })}\n\n`
         );
     }
 
-    clients[countryName]?.write("event: transfer\n");
-    clients[countryName]?.write(
-        `data: ${JSON.stringify({
-            ownCountry: { ...countries[countryName], ...generalInfo },
-        })}\n\n`
-    );
-    return res.status(200);
+    return res.status(200).json({
+        ...countries[countryName],
+        ...generalInfo,
+    });
 });
 
 app.listen(PORT, (err) => {

@@ -14,12 +14,13 @@ const initialState = {
     name: null,
     meanLiveLvl: null,
     balance: null,
-    transferSum: null,
+    transfers: {},
+    transferStatus: "idle",
     bombs: null,
     isHaveNuclearTech: null,
     nuclearTech: false, // развивать ли ядерную технологию
     ecology: false, // улучшать ли экологию
-    sanctionsFrom: null,
+    sanctionsFrom: [],
     changes: [], // приказы игрока
     cities: [],
 };
@@ -52,14 +53,27 @@ export const nextMove = createAsyncThunk(
     }
 );
 
-export const logout = createAsyncThunk("logout", async ({ name }) => {
+export const logout = createAsyncThunk("logout", async () => {
     const { data } = await axios.post(
         `${apiUrl}/logout`,
-        { name },
+        {},
         { withCredentials: true }
     );
     return data;
 });
+
+export const submitTransfers = createAsyncThunk(
+    "submitTransfers",
+    async ({ countryName, transfers }) => {
+        const { data } = await axios.post(
+            `${apiUrl}/transfer`,
+            { countryName, transfers },
+            { withCredentials: true }
+        );
+        console.log("transfer data:", data);
+        return data;
+    }
+);
 
 const ownCountrySlice = createSlice({
     name: "ownCountry",
@@ -186,16 +200,12 @@ const ownCountrySlice = createSlice({
                 );
             }
         },
-        changeTransfer(state, action) {
-            const { transfers } = action.payload;
-            state.changes.push({
-                type: "transfer",
-                transfers: transfers,
-            });
-            let sum = 0;
-            Object.values(transfers).map((s) => (sum += Number(s)));
-            state.balance += state.transferSum - sum;
-            state.transferSum = sum;
+        setTransfers(state, action) {
+            const { countryName, value } = action.payload;
+            state.transfers[countryName] = Math.min(
+                Math.max(0, value),
+                state.balance
+            );
         },
     },
     extraReducers: (builder) => {
@@ -210,7 +220,7 @@ const ownCountrySlice = createSlice({
                 state.status = "error";
             })
             .addCase(nextMove.pending, (state) => {
-                // state.status = "loading";
+                state.status = "loading";
             })
             .addCase(nextMove.fulfilled, (state, action) => {
                 if (!action.payload.isLast) {
@@ -229,6 +239,22 @@ const ownCountrySlice = createSlice({
             })
             .addCase(logout.rejected, (state) => {
                 console.log("Невозможно сбросить сессию");
+            })
+            .addCase(submitTransfers.pending, (state, action) => {
+                state.transferStatus = "loading";
+            })
+            .addCase(submitTransfers.fulfilled, (state, action) => {
+                return {
+                    ...state,
+                    transferStatus: "idle",
+                    changes: [],
+                    ecology: false,
+                    nuclearTech: false,
+                    ...action.payload,
+                };
+            })
+            .addCase(submitTransfers.rejected, (state, action) => {
+                state.transferStatus = "error";
             });
     },
 });
@@ -241,7 +267,7 @@ export const {
     changeCity,
     buildBombs,
     changeBombing,
-    changeTransfer,
+    setTransfers,
 } = ownCountrySlice.actions;
 
 export const selectAttackedCities = createSelector(
