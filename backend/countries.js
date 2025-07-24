@@ -1,3 +1,5 @@
+import  config  from "./game-config.json" with {type: "json"};
+
 export const COUNTRIES = {
     США: ["Вашингтон", "Нью-Йорк", "Мемфис", "Майами"],
     Россия: ["Москва", "Санкт-Петербург", "Новосибирск", "Владивосток"],
@@ -9,7 +11,7 @@ export const COUNTRIES = {
     Греция: ["Афины", "Салоники", "Патры", "Лариса"],
 };
 
-export const numPlayers = 5;
+const numPlayers = config.numPlayers
 
 function Country(name, citiesName) {
     this.name = name;

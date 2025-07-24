@@ -4,29 +4,19 @@ import cookieParser from "cookie-parser";
 import countries, {
     prepareCountries,
     next,
-    numPlayers,
     attack,
     COUNTRIES,
 } from "./countries.js";
 import { existsSync } from "fs";
-
+import  config  from "./game-config.json" with { type: "json" };
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PASSWORDS = {
-    США: "p",
-    Россия: "h",
-    Китай: "anOMx1SbpqO7lcne",
-    "Сев. Корея": "ayRGhJRAwTsjf8RD",
-    Германия: "avWtZdtFO0HdpAOU",
-    Франция: "cXQ6RHYqThWgVtrM",
-    Ирак: "REjGyTgMtiJZo5xI",
-    Греция: "rez7cnTVHRr7mv2u",
-};
-
+const PASSWORDS = config.PASSWORDS
+const numPlayers = config.numPlayers
 const sancValue = 40;
 
 let generalInfo = {
