@@ -22,6 +22,7 @@ const initialState = {
     ecology: false, // улучшать ли экологию
     sanctionsFrom: [],
     changes: [], // приказы игрока
+    changesSum: 0,
     cities: [],
 };
 
@@ -90,11 +91,13 @@ const ownCountrySlice = createSlice({
                     { type: "eco", name: "Вклад в экологию", cost: 20 }
                 );
                 state.balance -= 150;
+                state.changesSum += 150;
             } else {
                 state.changes = state.changes.filter(
                     (item) => item.name !== "Вклад в экологию"
                 );
                 state.balance += 150;
+                state.changesSum -= 150;
             }
         },
         changeTech(state, action) {
@@ -113,8 +116,10 @@ const ownCountrySlice = createSlice({
                     }
                 );
                 state.balance -= 500;
+                state.changesSum += 500;
             } else {
                 state.balance += 500;
+                state.changesSum -= 500;
                 state.changes = state.changes.filter(
                     (item) => item.name !== "Развитие ядерной технологии"
                 );
@@ -142,8 +147,10 @@ const ownCountrySlice = createSlice({
                     cost: type === "Улучшение" ? 150 : 300,
                 });
                 state.balance -= type === "Улучшение" ? 150 : 300;
+                state.changesSum += type === "Улучшение" ? 150 : 300;
             } else {
                 state.balance += type === "Улучшение" ? 150 : 300;
+                state.changesSum -= type === "Улучшение" ? 150 : 300;
                 state.changes = state.changes.filter(
                     (item) =>
                         !(
@@ -157,6 +164,7 @@ const ownCountrySlice = createSlice({
             const { count, waste } = action.payload;
             if (count !== 0) {
                 state.balance = state.balance + waste - count * 150;
+                state.changesSum = state.changesSum - waste + count * 150;
                 const index = state.changes.findIndex(
                     (item) =>
                         item.type === "expense" &&
@@ -178,6 +186,7 @@ const ownCountrySlice = createSlice({
                 }
             } else {
                 state.balance += waste;
+                state.changesSum -= waste;
                 state.changes = state.changes.filter(
                     (item) => item.name !== "Строительство бомб"
                 );
@@ -244,12 +253,10 @@ const ownCountrySlice = createSlice({
                 state.transferStatus = "loading";
             })
             .addCase(submitTransfers.fulfilled, (state, action) => {
+                action.payload.balance -= state.changesSum;
                 return {
                     ...state,
                     transferStatus: "idle",
-                    changes: [],
-                    ecology: false,
-                    nuclearTech: false,
                     ...action.payload,
                 };
             })

@@ -11,7 +11,6 @@ import withLoader from "../../extra/ButtonWithLoading";
 const Transfer = () => {
     const countryName = useSelector((state) => state.ownCountry.name);
     const countries = useSelector((state) => selectExclude(state, countryName));
-    const balance = useSelector((state) => state.ownCountry.balance);
     const transfers = useSelector((state) => state.ownCountry.transfers);
     const transferStatus = useSelector(
         (state) => state.ownCountry.transferStatus

@@ -1,10 +1,8 @@
 import React from "react";
 import EcologyGraph from "../component/Graphic/EcologyGraph";
 import CountryGraph from "../component/Graphic/CountryGraph";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import AllCountriesGraph from "../component/Graphic/AllCountriesGraph";
-import { logout } from "../features/ownCountrySlice";
 
 const colors = [
     "#59D5E0",
