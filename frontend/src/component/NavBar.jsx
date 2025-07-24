@@ -5,13 +5,12 @@ import { logout } from "../features/ownCountrySlice";
 
 const Navbar = () => {
     const round = useSelector((state) => state.ownCountry.round);
-    const countryName = useSelector((state) => state.ownCountry.countryName);
 
     const dispatch = useDispatch();
 
     const signOut = () => {
         dispatch(logout());
-        return <Navigate to="/" replace />;
+        return null;
     };
 
     return (

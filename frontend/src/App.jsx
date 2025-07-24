@@ -4,14 +4,27 @@ import Navbar from "./component/NavBar";
 import Home from "./pages/Home";
 import Statistics from "./pages/Statistics";
 import Login from "./pages/Login";
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuth } from "./features/ownCountrySlice";
 
 function App() {
-    const Navigation = (WrappedComponent) => {
+    const dispatch = useDispatch();
+    const isAuth = useSelector((state) => state.ownCountry.isAuth);
+
+    if (!isAuth) {
+        dispatch(checkAuth({ password: undefined }));
+    }
+
+    const ProtectedRoute = ({ children }) => {
+        return isAuth ? children : <Navigate to="/" replace />;
+    };
+
+    const Navigation = ({ children }) => {
         const NewComponent = () => {
             return (
                 <>
                     <Navbar />
-                    <WrappedComponent />
+                    {children}
                     <div style={{ marginBottom: 600 + "px" }}></div>
                 </>
             );
@@ -23,8 +36,26 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="" exact="true" element={<Login />} />
-                <Route path="home" element={Navigation(Home)} />
-                <Route path="statistics" element={Navigation(Statistics)} />
+                <Route
+                    path="home"
+                    element={
+                        <ProtectedRoute>
+                            <Navigation>
+                                <Home />
+                            </Navigation>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="statistics"
+                    element={
+                        <ProtectedRoute>
+                            <Navigation>
+                                <Statistics />
+                            </Navigation>
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
