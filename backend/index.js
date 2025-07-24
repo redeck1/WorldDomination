@@ -92,17 +92,13 @@ app.get("/game-update", (req, res) => {
     });
 
     clients[countryName] = res;
-    console.log("кол-во подключений[откр]:", Object.keys(clients).length);
-
     req.on("close", () => {
         delete clients[countryName];
-        console.log("кол-во подключений[закр]:", Object.keys(clients).length);
     });
 });
 
 const broadcastGameUpdate = () => {
     for (const key in clients) {
-        console.log("Данные о новом раунде отошли", key);
         const client = clients[key];
         client.write("event: gameUpdate\n");
         client.write(
@@ -120,8 +116,6 @@ app.get("/countries", (req, res) => {
 
 app.post("/login", (req, res) => {
     const password = req.body.password || req.cookies.session;
-    console.log("/login password", req.body.password);
-    console.log("/login cookie", req.cookies.session);
 
     if (!Object.values(PASSWORDS).includes(password))
         return res.status(403).json("Неверный код");
@@ -144,17 +138,13 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-    try {
-        res.clearCookie("session", {
-            httpOnly: true,
-            // secure: true, // Только HTTPS!
-            sameSite: "Strict",
+    res.clearCookie("session", {
+        httpOnly: true,
+        // secure: true, // Только HTTPS!
+        sameSite: "Strict",
         });
-        return res.status(200).json("logout");
-    } catch (error) {
-        console.log(error);
-        return res.status(400).json("Ошибка");
-    }
+    return res.status(200).json("logout");
+
 });
 
 app.post("/next", (req, res) => {
@@ -316,7 +306,6 @@ app.post("/transfer", (req, res) => {
 
     for (let to in transfers) {
         if (!Object.keys(countries).includes(to)) {
-            console.log("Попытка перевести денги стране:", to);
             return res.status(400).send("Страны с указанным именем нет");
         }
         const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);

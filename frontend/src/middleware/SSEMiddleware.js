@@ -31,7 +31,6 @@ export const gameSseMiddleware = (store) => {
             });
 
             eventSource.onerror = (error) => {
-                console.error("SSE connection error:", error);
                 eventSource?.close();
             };
         };
@@ -42,7 +41,6 @@ export const gameSseMiddleware = (store) => {
                 if (eventSource) {
                     eventSource.close();
                 }
-                console.log("Authenticated, establishing SSE connection");
                 connect(action.payload.name);
                 store.dispatch(fetchCountriesData());
                 break;

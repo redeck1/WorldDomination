@@ -71,7 +71,6 @@ export const submitTransfers = createAsyncThunk(
             { countryName, transfers },
             { withCredentials: true }
         );
-        console.log("transfer data:", data);
         return data;
     }
 );
