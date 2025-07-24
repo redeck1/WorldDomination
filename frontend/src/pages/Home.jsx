@@ -13,7 +13,6 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const Home = () => {
     const isComplete = useSelector((state) => state.ownCountry.isComplete);
     const countryName = useSelector((state) => state.ownCountry.name);
-    const isAuth = useSelector((state) => state.ownCountry.isAuth);
     const countriesLoading =
         useSelector((state) => state.countries.status) === "loading";
     const dispatch = useDispatch();
@@ -22,30 +21,6 @@ const Home = () => {
     const ButtonWithLoader = withLoader((props) => {
         return <button {...props}>Обновить</button>;
     });
-
-    (async function initializeAuth() {
-        if (!isAuth) {
-            try {
-                const res = await axios.post(`${apiUrl}/login`, {
-                    withCredentials: true,
-                });
-                if (res.ok) {
-                    const ownCountry = res.data.ownCountry;
-                    const countries = res.data.countries;
-                    dispatch(setOwnCountry(ownCountry));
-                    dispatch(setCountries(countries));
-                } else {
-                    console.log(res);
-                    dispatch(logout());
-                    return <Navigate to="/" replace />;
-                }
-            } catch (err) {
-                console.log("!isAuth error", err);
-                dispatch(logout());
-                return <Navigate to="/" replace />;
-            }
-        }
-    })();
 
     if (countriesLoading) {
         return (
