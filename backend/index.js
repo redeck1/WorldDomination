@@ -182,10 +182,10 @@ app.post("/next", (req, res) => {
 
     if (countries[name].isComplete) {
         return res.status(400).json("Эта страна уже завершила ход");
-    } else {
-        countries[name].isComplete = true;
-        generalInfo.completed += 1;
     }
+    const oldCountry = structuredClone(countries[name]);
+    countries[name].isComplete = true;
+    generalInfo.completed += 1;
 
     for (let change of changes) {
         switch (change.type) {
@@ -215,7 +215,9 @@ app.post("/next", (req, res) => {
 
             case "expense":
                 if (newCountries[name].balance - change.cost < 0) {
-                    res.status(400).send("Баланс страны меньше нуля");
+                    newCountries[name] = oldCountry;
+                    generalInfo.completed -= 1;
+                    return res.status(400).send("Баланс страны меньше нуля");
                 } else {
                     newCountries[name].balance -= change.cost;
                 }
@@ -240,6 +242,8 @@ app.post("/next", (req, res) => {
                     if (countries[name].isHaveNuclearTech === true) {
                         newCountries[name].bombs += change.count;
                     } else {
+                        newCountries[name] = oldCountry;
+                        generalInfo.completed -= 1;
                         return res
                             .status(400)
                             .send("Ядерная технология не развита");
@@ -248,6 +252,9 @@ app.post("/next", (req, res) => {
                 break;
 
             default:
+                newCountries[name] = oldCountry;
+                generalInfo.completed -= 1;
+
                 return res.status(400).send("Неправильный тип изменения");
         }
     }
@@ -294,24 +301,6 @@ app.post("/next", (req, res) => {
             .json({ mesage: "final_turn_processed", isLast: true });
     }
     return res.status(200).json({ message: "data accepted", isLast: false });
-});
-
-app.get("/update_info", (req, res) => {
-    // const countryName = req.query.country_name;
-    const password = req.cookies.session;
-
-    const countryName = Object.keys(PASSWORDS).find(
-        (k) => PASSWORDS[k] === password
-    );
-    if (
-        !Object.values(PASSWORDS).includes(password)
-        // countryName !== realCountryName
-    )
-        return res.status(403).json("Доступ запрещен");
-    return res.status(200).json({
-        countries: prepareCountries(countries),
-        ownCountry: { ...countries[countryName], ...generalInfo, isAuth: true },
-    });
 });
 
 app.get("/imgs/:name", (req, res) => {

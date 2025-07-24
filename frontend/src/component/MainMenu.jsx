@@ -8,11 +8,17 @@ import Decrees from "../component/Panels/Decrees";
 import CityGroup from "./City/CityGroup";
 import { useDispatch, useSelector } from "react-redux";
 import { nextMove } from "../features/ownCountrySlice";
+import withLoader from "../extra/ButtonWithLoading";
 
 const MainMenu = () => {
     const countryName = useSelector((state) => state.ownCountry.name);
     const changes = useSelector((state) => state.ownCountry.changes);
+    const nextMoveLoading = useSelector((state) => state.ownCountry.status);
     const dispatch = useDispatch();
+
+    const NextMoveButton = withLoader((props) => {
+        return <button {...props}>Закончить ход</button>;
+    });
 
     return (
         <div className="container py-2 mt-4 bg-body-secondary rounded-3">
@@ -39,17 +45,20 @@ const MainMenu = () => {
                 </div>
             </div>
             <div className="justify-content-center d-flex mt-3">
-                <button
+                <NextMoveButton
                     type="button"
-                    className="btn btn-outline-primary btn-lg fw-bold"
+                    className={
+                        nextMoveLoading === "error"
+                            ? "btn btn-outline-danger btn-lg fw-bold"
+                            : "btn btn-outline-primary btn-lg fw-bold"
+                    }
+                    loading={nextMoveLoading === "loading" ? "true" : undefined}
                     onClick={() =>
                         dispatch(
                             nextMove({ name: countryName, changes: changes })
                         )
                     }
-                >
-                    Закончить ход
-                </button>
+                />
             </div>
         </div>
     );
