@@ -40,7 +40,7 @@ const newCountries = structuredClone(countries);
 let attacks = [];
 
 const corsOptions = {
-    origin: "http://localhost:3000", // Или '*' для любого домена
+    origin: ["http://localhost:3000", "http://localhost", "http://localhost:80"], // Или '*' для любого домена
     methods: ["GET", "POST", "DELETE", "UPDATE"],
     credentials: true,
 };
