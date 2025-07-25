@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+    frontend:
+        build: ./frontend
+        ports:
+            - "80:80"
+        depends_on:
+            - backend
+        networks:
+            - app-network
+
+    backend:
+        build: ./backend
+        expose:
+            - "4444"
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
