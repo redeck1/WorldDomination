@@ -24,6 +24,7 @@ const initialState = {
     changes: [], // приказы игрока
     changesSum: 0,
     cities: [],
+    completed: 0,
 };
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -210,10 +211,11 @@ const ownCountrySlice = createSlice({
         },
         setTransfers(state, action) {
             const { countryName, value } = action.payload;
-            state.transfers[countryName] = Math.min(
-                Math.max(0, value),
-                state.balance
-            );
+            if (value > 0 && state.balance > 0) {
+                state.transfers[countryName] = Math.min(value, state.balance);
+            } else {
+                state.transfers[countryName] = 0;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -235,9 +237,12 @@ const ownCountrySlice = createSlice({
                     //Особое обновление для последнего игрока
                     state.isComplete = true;
                 }
+                state.status = "idle";
                 state.changes = [];
+                state.changesSum = 0;
                 state.nuclearTech = false;
                 state.ecology = false;
+                state.completed = action.payload.completed;
             })
             .addCase(nextMove.rejected, (state, action) => {
                 state.status = "error";

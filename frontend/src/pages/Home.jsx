@@ -5,8 +5,10 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
     const isComplete = useSelector((state) => state.ownCountry.isComplete);
+    const completed = useSelector((state) => state.ownCountry.completed);
     const countriesLoading =
         useSelector((state) => state.countries.status) === "loading";
+    const numPlayers = useSelector((state) => state.countries.numPlayers);
 
     if (countriesLoading) {
         return (
@@ -21,7 +23,9 @@ const Home = () => {
     return (
         <div className="container" style={{ maxWidth: 1480 + "px" }}>
             {isComplete ? (
-                <h6>Вы завершили ход</h6>
+                <h6>
+                    Вы завершили ход. Завершили {completed}/{numPlayers}
+                </h6>
             ) : (
                 <div className="row">
                     <div className="col-8">
