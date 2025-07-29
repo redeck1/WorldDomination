@@ -362,8 +362,8 @@ app.post("/transfer", (req, res) => {
         clients[to]?.write(
             `data: ${JSON.stringify({
                 ownCountry: {
-                    ...countries[countryName],
-                    ...generalInfo,
+                    balance: countries[countryName].balance,
+                    transfers: countries[countryName].transfers
                 },
                 from: countryName,
                 sum,
@@ -372,8 +372,8 @@ app.post("/transfer", (req, res) => {
     }
 
     return res.status(200).json({
-        ...countries[countryName],
-        ...generalInfo,
+       balance: countries[countryName].balance,
+       transfers: countries[countryName].transfers
     });
 });
 
