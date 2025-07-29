@@ -19,6 +19,28 @@ const PASSWORDS = config.PASSWORDS
 const numPlayers = config.numPlayers
 const sancValue = 40;
 
+const gameLogs = []
+const parseChanges = (countryName, changes) => {
+     for (let change of changes) {
+        switch (change.type) {
+            case "sanction":
+                gameLogs.push(`[${countryName}] Санкции на ${change.to}`)
+                break;
+
+            case "atack":
+                gameLogs.push(`[${countryName}] Атаковала ${change.name}`)
+                break;
+
+            case "expense":
+                gameLogs.push(`[${countryName}] ${change.name}`)
+                break
+
+            default:
+                break;
+        }
+    }
+}
+
 let generalInfo = {
     completed: 0,
     round: 1,
@@ -105,6 +127,7 @@ const broadcastGameUpdate = () => {
             `data: ${JSON.stringify({
                 countries: prepareCountries(countries),
                 ownCountry: { ...countries[key], ...generalInfo },
+                logs: gameLogs
             })}\n\n`
         );
     }
@@ -187,10 +210,8 @@ app.post("/next", (req, res) => {
 
             case "sanction":
                 newCountries[change.to].sanctionsFrom.push(name);
-                const value = newCountries[change.to].balance - sancValue
-
-                if (newCountries[change.to].balance - sancValue > 0) {
-                    newCountries[change.to].balance = Math.max(0, value)}
+                const newBalance = newCountries[change.to].balance - sancValue
+                newCountries[change.to].balance = Math.max(0, newBalance)
                 break;
 
             case "atack":
@@ -240,12 +261,16 @@ app.post("/next", (req, res) => {
 
             default:
                 rollbackCountry(name, oldCountry)
-
                 return res.status(400).send("Неправильный тип изменения");
         }
     }
+
+    parseChanges(name, changes)
+
     if (generalInfo.completed === numPlayers) {
         console.log("НОВЫЙ РАУНД");
+        gameLogs.push("==НОВЫЙ РАУНД==")
+
         for (const names of attacks) {
             const [countryName, cityName] = names.split("/");
             const cityIndex = countries[countryName].cities.findIndex(

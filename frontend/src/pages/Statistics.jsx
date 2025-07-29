@@ -3,6 +3,7 @@ import EcologyGraph from "../component/Graphic/EcologyGraph";
 import CountryGraph from "../component/Graphic/CountryGraph";
 import { useSelector } from "react-redux";
 import AllCountriesGraph from "../component/Graphic/AllCountriesGraph";
+import Logs from "../component/Panels/Logs";
 
 const colors = [
     "#59D5E0",
@@ -33,7 +34,7 @@ const Statistics = () => {
                     </div>
                 ))}
             </div>
-            <div className="row">
+            <div className="row row-cols-2">
                 <div className="col">
                     <h3 className="ps-5">Экология</h3>
                     <EcologyGraph />
@@ -42,6 +43,9 @@ const Statistics = () => {
                 <div className="col">
                     <h3 className="ps-5">Средний уровень развития стран</h3>
                     <AllCountriesGraph data={countries} />
+                </div>
+                <div className="col px-5">
+                    <Logs />
                 </div>
             </div>
         </>
