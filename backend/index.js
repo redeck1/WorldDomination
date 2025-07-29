@@ -127,7 +127,7 @@ const broadcastGameUpdate = () => {
             `data: ${JSON.stringify({
                 countries: prepareCountries(countries),
                 ownCountry: { ...countries[key], ...generalInfo },
-                logs: gameLogs
+                logs: generalInfo.round > 6 ? gameLogs : ["Здесь пока ничего нет"]
             })}\n\n`
         );
     }
@@ -269,7 +269,7 @@ app.post("/next", (req, res) => {
 
     if (generalInfo.completed === numPlayers) {
         console.log("НОВЫЙ РАУНД");
-        gameLogs.push("==НОВЫЙ РАУНД==")
+        gameLogs.push(`==${generalInfo.round + 1} РАУНД==`)
 
         for (const names of attacks) {
             const [countryName, cityName] = names.split("/");
