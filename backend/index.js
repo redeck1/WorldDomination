@@ -8,20 +8,24 @@ import countries, {
     COUNTRIES,
 } from "./countries.js";
 import { existsSync } from "fs";
-import  config  from "./game-config.json" with { type: "json" };
+import config from "./game-config.json" with { type: "json" };
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PASSWORDS = config.PASSWORDS
-const numPlayers = config.numPlayers
-const sancValue = 40;
+function generateRandomString(length) {
+    let result = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
 
-const gameLogs = []
 const parseChanges = (countryName, changes) => {
-     for (let change of changes) {
+    for (let change of changes) {
         switch (change.type) {
             case "sanction":
                 gameLogs.push(`[${countryName}] Санкции на ${change.to}`)
@@ -40,6 +44,28 @@ const parseChanges = (countryName, changes) => {
         }
     }
 }
+
+const broadcastGameUpdate = () => {
+    for (const key in clients) {
+        const client = clients[key];
+        client.write("event: gameUpdate\n");
+        client.write(
+            `data: ${JSON.stringify({
+                countries: prepareCountries(countries),
+                ownCountry: { ...countries[key], ...generalInfo },
+                logs: generalInfo.round > 6 ? gameLogs : ["Здесь пока ничего нет"]
+            })}\n\n`
+        );
+    }
+};
+
+const PASSWORDS = Object.keys(config.PASSWORDS).reduce((prev, curr) =>
+    ({ ...prev, [curr]: generateRandomString(16) }), {})
+console.log("Пароли: ", PASSWORDS)
+const numPlayers = config.numPlayers
+const sancValue = 40;
+
+const gameLogs = []
 
 let generalInfo = {
     completed: 0,
@@ -85,9 +111,8 @@ app.use("/", (req, res, next) => {
         const seconds = now.getSeconds();
         const milliseconds = now.getMilliseconds();
         const url = decodeURIComponent(req.url);
-        const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${
-            req.method
-        } ${url} -> ${res.statusCode} ${res.statusMessage || ""}`;
+        const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${req.method
+            } ${url} -> ${res.statusCode} ${res.statusMessage || ""}`;
         console.log(data);
     });
 
@@ -119,19 +144,6 @@ app.get("/game-update", (req, res) => {
     });
 });
 
-const broadcastGameUpdate = () => {
-    for (const key in clients) {
-        const client = clients[key];
-        client.write("event: gameUpdate\n");
-        client.write(
-            `data: ${JSON.stringify({
-                countries: prepareCountries(countries),
-                ownCountry: { ...countries[key], ...generalInfo },
-                logs: generalInfo.round > 6 ? gameLogs : ["Здесь пока ничего нет"]
-            })}\n\n`
-        );
-    }
-};
 
 app.get("/countries", (req, res) => {
     return res.status(200).json(prepareCountries(countries));
@@ -165,7 +177,7 @@ app.post("/logout", (req, res) => {
         httpOnly: true,
         // secure: true, // Только HTTPS!
         sameSite: "Strict",
-        });
+    });
     return res.status(200).json("logout");
 
 });
@@ -245,8 +257,8 @@ app.post("/next", (req, res) => {
                     change.name.includes("Улучшение")
                         ? (newCountries[name].cities[index].growth += 10)
                         : (newCountries[name].cities[
-                              index
-                          ].isHaveShield = true);
+                            index
+                        ].isHaveShield = true);
                 } else if (change.name === "Строительство бомб") {
                     if (countries[name].isHaveNuclearTech === true) {
                         newCountries[name].bombs += change.count;
@@ -346,9 +358,9 @@ app.post("/transfer", (req, res) => {
     }
 
     const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);
-        if (countries[countryName].balance < sum) {
-            return res.status(400).send("Недостаточно средств");
-        }
+    if (countries[countryName].balance < sum) {
+        return res.status(400).send("Недостаточно средств");
+    }
 
     for (const to in transfers) {
         const sum = transfers[to];
@@ -372,8 +384,8 @@ app.post("/transfer", (req, res) => {
     }
 
     return res.status(200).json({
-       balance: countries[countryName].balance,
-       transfers: countries[countryName].transfers
+        balance: countries[countryName].balance,
+        transfers: countries[countryName].transfers
     });
 });
 
