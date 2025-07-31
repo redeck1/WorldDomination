@@ -11,6 +11,7 @@ import { existsSync } from "fs";
 import config from "./game-config.json" with { type: "json" };
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { start } from "repl";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,6 +59,20 @@ const broadcastGameUpdate = () => {
         );
     }
 };
+
+function startGameConsole() {
+  const replServer = start({
+    prompt: 'Game Console > ',
+    useGlobal: true,
+  });
+
+  // Делаем нужные переменные доступными в REPL
+  replServer.context.app = app;
+  replServer.context.state = countries;
+  replServer.context.__dirname = __dirname; // Если нужно
+
+  console.log('REPL доступен. Используйте "state", "app" для управления.');
+}
 
 const PASSWORDS = Object.keys(config.PASSWORDS).reduce((prev, curr) =>
     ({ ...prev, [curr]: generateRandomString(16) }), {})
@@ -394,4 +409,5 @@ app.listen(PORT, (err) => {
         console.log(err);
     }
     console.log(`Server is running on port ${PORT}`);
+    startGameConsole()
 });
