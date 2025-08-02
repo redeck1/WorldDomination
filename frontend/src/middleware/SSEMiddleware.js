@@ -1,4 +1,5 @@
 import { fetchCountriesData, setCountries } from "../features/countriesSlice";
+import { setLogs } from "../features/logsSlice";
 import { setOwnCountry } from "../features/ownCountrySlice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -20,6 +21,7 @@ export const gameSseMiddleware = (store) => {
                 const data = JSON.parse(event.data);
                 store.dispatch(setCountries(data.countries));
                 store.dispatch(setOwnCountry(data.ownCountry));
+                store.dispatch(setLogs(data.logs));
 
                 alert("Новый раунд!");
             });

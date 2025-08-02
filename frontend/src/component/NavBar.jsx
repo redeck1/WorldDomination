@@ -35,13 +35,19 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div>
-                        <Link to="/home" className="btn btn-primary">
+                        <Link to="/home" className="btn btn-primary btn-lg">
                             Страна
                         </Link>
-                        <Link to="/statistics" className="btn btn-primary">
+                        <Link
+                            to="/statistics"
+                            className="btn btn-primary btn-lg"
+                        >
                             Общая статистика
                         </Link>
-                        <button className="btn btn-primary" onClick={signOut}>
+                        <button
+                            className="btn btn-primary btn-lg"
+                            onClick={signOut}
+                        >
                             Выйти
                         </button>
                     </div>

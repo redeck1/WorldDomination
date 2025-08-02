@@ -19,10 +19,10 @@ const Decrees = () => {
     const renderPartOfExpense = (textColor, changes, sum, chr = "") => {
         return (
             <div>
-                {changes.map((change) => (
+                {changes.map((change, ind) => (
                     <div
                         className="d-flex justify-content-between"
-                        key={change.name}
+                        key={change.name + ind}
                     >
                         <span className={textColor}>{change.name}</span>
                         <span className={textColor}>
