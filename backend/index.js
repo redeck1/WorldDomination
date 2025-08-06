@@ -244,7 +244,7 @@ app.post("/next", (req, res) => {
             case "atack":
                 if (newCountries[name].bombs <= 0) {
                     rollbackCountry(name, oldCountry)
-                    res.status(400).json("Не хватает бомб для атаки")
+                    return res.status(400).json("Не хватает бомб для атаки")
                 }
                 newCountries[name].bombs -= 1;
                 attacks.push(change.name);

@@ -2,6 +2,7 @@ import React from "react";
 import SideMenu from "../component/SideMenu/SideMenu";
 import MainMenu from "../component/MainMenu";
 import { useSelector } from "react-redux";
+import Clicker from "../component/Clicker";
 
 const Home = () => {
     const isComplete = useSelector((state) => state.ownCountry.isComplete);
@@ -23,9 +24,12 @@ const Home = () => {
     return (
         <div className="container" style={{ maxWidth: 1480 + "px" }}>
             {isComplete ? (
-                <h6>
-                    Вы завершили ход. Завершили {completed}/{numPlayers}
-                </h6>
+                <>
+                    <h6>
+                        Вы завершили ход. Завершили {completed}/{numPlayers}
+                    </h6>
+                    <Clicker />
+                </>
             ) : (
                 <div className="row">
                     <div className="col-8">
