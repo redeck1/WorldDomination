@@ -8,16 +8,79 @@ import countries, {
     COUNTRIES,
 } from "./countries.js";
 import { existsSync } from "fs";
-import  config  from "./game-config.json" with { type: "json" };
+import config from "./game-config.json" with { type: "json" };
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { start } from "repl";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const PASSWORDS = config.PASSWORDS
+function generateRandomString(length) {
+    let result = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
+const parseChanges = (countryName, changes) => {
+    for (let change of changes) {
+        switch (change.type) {
+            case "sanction":
+                gameLogs.push(`[${countryName}] Санкции на ${change.to}`)
+                break;
+
+            case "atack":
+                gameLogs.push(`[${countryName}] Атаковала ${change.name}`)
+                break;
+
+            case "expense":
+                gameLogs.push(`[${countryName}] ${change.name}`)
+                break
+
+            default:
+                break;
+        }
+    }
+}
+
+const broadcastGameUpdate = () => {
+    for (const key in clients) {
+        const client = clients[key];
+        client.write("event: gameUpdate\n");
+        client.write(
+            `data: ${JSON.stringify({
+                countries: prepareCountries(countries),
+                ownCountry: { ...countries[key], ...generalInfo },
+                logs: generalInfo.round > 6 ? gameLogs : ["Здесь пока ничего нет"]
+            })}\n\n`
+        );
+    }
+};
+
+function startGameConsole() {
+  const replServer = start({
+    prompt: 'Game Console > ',
+    useGlobal: true,
+  });
+
+  // Делаем нужные переменные доступными в REPL
+  replServer.context.app = app;
+  replServer.context.state = countries;
+  replServer.context.__dirname = __dirname; // Если нужно
+
+  console.log('REPL доступен. Используйте "state", "app" для управления.');
+}
+
+const PASSWORDS = Object.keys(config.PASSWORDS).reduce((prev, curr) =>
+    ({ ...prev, [curr]: generateRandomString(16) }), {})
+console.log("Пароли: ", PASSWORDS)
 const numPlayers = config.numPlayers
 const sancValue = 40;
+
+const gameLogs = []
 
 let generalInfo = {
     completed: 0,
@@ -63,9 +126,8 @@ app.use("/", (req, res, next) => {
         const seconds = now.getSeconds();
         const milliseconds = now.getMilliseconds();
         const url = decodeURIComponent(req.url);
-        const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${
-            req.method
-        } ${url} -> ${res.statusCode} ${res.statusMessage || ""}`;
+        const data = `${hour}:${minutes}:${seconds}:${milliseconds} ${req.method
+            } ${url} -> ${res.statusCode} ${res.statusMessage || ""}`;
         console.log(data);
     });
 
@@ -97,18 +159,6 @@ app.get("/game-update", (req, res) => {
     });
 });
 
-const broadcastGameUpdate = () => {
-    for (const key in clients) {
-        const client = clients[key];
-        client.write("event: gameUpdate\n");
-        client.write(
-            `data: ${JSON.stringify({
-                countries: prepareCountries(countries),
-                ownCountry: { ...countries[key], ...generalInfo },
-            })}\n\n`
-        );
-    }
-};
 
 app.get("/countries", (req, res) => {
     return res.status(200).json(prepareCountries(countries));
@@ -142,10 +192,16 @@ app.post("/logout", (req, res) => {
         httpOnly: true,
         // secure: true, // Только HTTPS!
         sameSite: "Strict",
-        });
+    });
     return res.status(200).json("logout");
 
 });
+
+function rollbackCountry(name, oldCountry) {
+    countries[name] = oldCountry;
+    newCountries[name] = oldCountry;
+    generalInfo.completed -= 1;
+}
 
 app.post("/next", (req, res) => {
     const { name, changes } = req.body;
@@ -169,7 +225,7 @@ app.post("/next", (req, res) => {
 
     for (let change of changes) {
         switch (change.type) {
-            case "eco":
+            case "eco": //Применяет экологию даже при отрицательном балансе
                 let lvl = newGeneralInfo.ecologyLvl.at(-1).lvl;
                 if (lvl + change.cost > 1) {
                     lvl += change.cost;
@@ -181,23 +237,23 @@ app.post("/next", (req, res) => {
 
             case "sanction":
                 newCountries[change.to].sanctionsFrom.push(name);
-                if (newCountries[change.to].balance - sancValue > 0) {
-                    newCountries[change.to].balance -= 40;
-                } else {
-                    newCountries[change.to].balance = 0;
-                }
+                const newBalance = newCountries[change.to].balance - sancValue
+                newCountries[change.to].balance = Math.max(0, newBalance)
                 break;
 
             case "atack":
+                if (newCountries[name].bombs <= 0) {
+                    rollbackCountry(name, oldCountry)
+                    res.status(400).json("Не хватает бомб для атаки")
+                }
                 newCountries[name].bombs -= 1;
                 attacks.push(change.name);
                 break;
 
             case "expense":
                 if (newCountries[name].balance - change.cost < 0) {
-                    newCountries[name] = oldCountry;
-                    generalInfo.completed -= 1;
-                    return res.status(400).send("Баланс страны меньше нуля");
+                    rollbackCountry(name, oldCountry)
+                    return res.status(400).json("Баланс страны меньше нуля");
                 } else {
                     newCountries[name].balance -= change.cost;
                 }
@@ -216,14 +272,13 @@ app.post("/next", (req, res) => {
                     change.name.includes("Улучшение")
                         ? (newCountries[name].cities[index].growth += 10)
                         : (newCountries[name].cities[
-                              index
-                          ].isHaveShield = true);
+                            index
+                        ].isHaveShield = true);
                 } else if (change.name === "Строительство бомб") {
                     if (countries[name].isHaveNuclearTech === true) {
                         newCountries[name].bombs += change.count;
                     } else {
-                        newCountries[name] = oldCountry;
-                        generalInfo.completed -= 1;
+                        rollbackCountry(name, oldCountry)
                         return res
                             .status(400)
                             .send("Ядерная технология не развита");
@@ -232,14 +287,17 @@ app.post("/next", (req, res) => {
                 break;
 
             default:
-                newCountries[name] = oldCountry;
-                generalInfo.completed -= 1;
-
+                rollbackCountry(name, oldCountry)
                 return res.status(400).send("Неправильный тип изменения");
         }
     }
+
+    parseChanges(name, changes)
+
     if (generalInfo.completed === numPlayers) {
         console.log("НОВЫЙ РАУНД");
+        gameLogs.push(`==${generalInfo.round + 1} РАУНД==`)
+
         for (const names of attacks) {
             const [countryName, cityName] = names.split("/");
             const cityIndex = countries[countryName].cities.findIndex(
@@ -280,7 +338,7 @@ app.post("/next", (req, res) => {
             .status(200)
             .json({ mesage: "final_turn_processed", isLast: true });
     }
-    return res.status(200).json({ message: "data accepted", isLast: false });
+    return res.status(200).json({ message: "data accepted", isLast: false, completed: generalInfo.completed });
 });
 
 app.get("/imgs/:name", (req, res) => {
@@ -304,14 +362,19 @@ app.post("/transfer", (req, res) => {
     )
         return res.status(403).json("Доступ запрещен");
 
-    for (let to in transfers) {
+    for (const to in transfers) {
         if (!Object.keys(countries).includes(to)) {
             return res.status(400).send("Страны с указанным именем нет");
         }
-        const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);
-        if (countries[countryName].balance < sum) {
-            return res.status(400).send("Недостаточно средств");
+
+        if (transfers[to] < 0) {
+            return res.status(400).send("Есть перевод с отрицательным значением")
         }
+    }
+
+    const sum = Object.values(transfers).reduce((sum, cur) => sum + cur, 0);
+    if (countries[countryName].balance < sum) {
+        return res.status(400).send("Недостаточно средств");
     }
 
     for (const to in transfers) {
@@ -326,8 +389,8 @@ app.post("/transfer", (req, res) => {
         clients[to]?.write(
             `data: ${JSON.stringify({
                 ownCountry: {
-                    ...countries[countryName],
-                    ...generalInfo,
+                    balance: countries[countryName].balance,
+                    transfers: countries[countryName].transfers
                 },
                 from: countryName,
                 sum,
@@ -336,8 +399,8 @@ app.post("/transfer", (req, res) => {
     }
 
     return res.status(200).json({
-        ...countries[countryName],
-        ...generalInfo,
+        balance: countries[countryName].balance,
+        transfers: countries[countryName].transfers
     });
 });
 
@@ -346,4 +409,5 @@ app.listen(PORT, (err) => {
         console.log(err);
     }
     console.log(`Server is running on port ${PORT}`);
+    startGameConsole()
 });
