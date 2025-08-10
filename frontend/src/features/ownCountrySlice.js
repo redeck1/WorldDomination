@@ -178,7 +178,7 @@ const ownCountrySlice = createSlice({
                             cost: count * 150,
                             count: count,
                         },
-                        { type: "eco", name: "Строительство бомб", cost: -0.6 }
+                        { type: "eco", name: "Строительство бомб", cost: -1 }
                     );
                 } else {
                     state.changes[index].cost = count * 150;

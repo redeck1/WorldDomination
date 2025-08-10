@@ -236,7 +236,9 @@ app.post("/next", (req, res) => {
         switch (change.type) {
             case "eco": //Применяет экологию даже при отрицательном балансе
                 let lvl = newGeneralInfo.ecologyLvl.at(-1).lvl;
-                if (lvl + change.cost > 1) {
+                if (lvl + change.cost > 120) {
+                    lvl = 120
+                } else if (lvl + change.cost > 1) {
                     lvl += change.cost;
                 } else {
                     lvl = 1;
