@@ -1,6 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const initialState = ["Здесь пока ничего нет"];
+const apiUrl = process.env.REACT_APP_API_URL;
+
+const initialState = ["Логи появятся после завершения 6 раунда"];
+
+export const fetchLogs = createAsyncThunk("logs/fetchLogs", async () => {
+    const { data } = await axios.get(`${apiUrl}/logs`);
+    return data;
+});
 
 const logsSlice = createSlice({
     name: "logs",
@@ -9,6 +17,11 @@ const logsSlice = createSlice({
         setLogs(state, action) {
             return action.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchLogs.fulfilled, (state, action) => {
+            return action.payload.logs;
+        });
     },
 });
 

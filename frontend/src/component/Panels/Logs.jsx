@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
+const colors = {
+    США: "#59D5E0",
+    Россия: "#F5DD61",
+    Китай: "#FAA300",
+    "Сев. Корея": "#BE95C4",
+    Германия: "#F4538A",
+    Франция: "#C80036",
+    Ирак: "#1D24CA",
+    Греция: "#0C1844",
+};
+
 function Logs() {
     const [cheched1, setCheched1] = useState(true);
     const [cheched2, setCheched2] = useState(false);
@@ -75,7 +86,25 @@ function Logs() {
                 </div>
             </div>
             {content.map((str, ind) => {
-                return <p key={ind}>{str}</p>;
+                const countryKey = Object.keys(colors).find((country) =>
+                    str.includes(country)
+                );
+
+                if (!countryKey) {
+                    return <p key={ind}>{str}</p>;
+                }
+
+                const parts = str.split(countryKey);
+
+                return (
+                    <p key={ind}>
+                        {parts[0]}
+                        <span style={{ color: colors[countryKey] }}>
+                            {countryKey}
+                        </span>
+                        {parts[1]}
+                    </p>
+                );
             })}
         </div>
     );

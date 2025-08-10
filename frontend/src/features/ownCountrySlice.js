@@ -194,18 +194,23 @@ const ownCountrySlice = createSlice({
         },
         changeBombing(state, action) {
             const { name, bool } = action.payload;
+            console.log(name);
             if (bool) {
                 state.bombs -= 1;
                 state.changes.push(
                     { type: "atack", name: name },
-                    { type: "eco", name: "Ядерная бомбордировка", cost: -10 }
+                    {
+                        type: "eco",
+                        name: `Ядерная бомбордировка ${name}`,
+                        cost: -10,
+                    }
                 );
             } else {
                 state.bombs += 1;
                 state.changes = state.changes.filter(
                     (item) =>
                         item.name !== name &&
-                        item.name !== "Ядерная бомбордировка"
+                        item.name !== `Ядерная бомбордировка ${name}`
                 );
             }
         },

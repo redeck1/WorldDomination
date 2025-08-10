@@ -3,4 +3,4 @@ venv
 frontend/node_modules
 frontend/.env
 .vscode
-backend/game-config.json
+# backend/game-config.json

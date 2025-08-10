@@ -54,7 +54,7 @@ const broadcastGameUpdate = () => {
             `data: ${JSON.stringify({
                 countries: prepareCountries(countries),
                 ownCountry: { ...countries[key], ...generalInfo },
-                logs: generalInfo.round > 6 ? gameLogs : ["Здесь пока ничего нет"]
+                logs: generalInfo.round > 6 ? gameLogs : ["Логи появятся после завершения 6 раунда"]
             })}\n\n`
         );
     }
@@ -68,13 +68,13 @@ function startGameConsole() {
 
   // Делаем нужные переменные доступными в REPL
   replServer.context.app = app;
-  replServer.context.state = countries;
+  replServer.context.state = {countries, gameLogs, generalInfo};
   replServer.context.__dirname = __dirname; // Если нужно
 
   console.log('REPL доступен. Используйте "state", "app" для управления.');
 }
 
-const PASSWORDS = Object.keys(config.PASSWORDS).reduce((prev, curr) =>
+const PASSWORDS = Object.keys(COUNTRIES).reduce((prev, curr) =>
     ({ ...prev, [curr]: generateRandomString(16) }), {})
 console.log("Пароли: ", PASSWORDS)
 const numPlayers = config.numPlayers
@@ -163,6 +163,10 @@ app.get("/game-update", (req, res) => {
 app.get("/countries", (req, res) => {
     return res.status(200).json(prepareCountries(countries));
 });
+
+app.get("/logs", (req, res) => {
+    return res.status(200).json({logs: generalInfo.round > 6 ? gameLogs : ["Логи появятся после завершения 6 раунда"]})
+})
 
 app.post("/login", (req, res) => {
     const password = req.body.password || req.cookies.session;
@@ -336,17 +340,9 @@ app.post("/next", (req, res) => {
         broadcastGameUpdate();
         return res
             .status(200)
-            .json({ mesage: "final_turn_processed", isLast: true });
+            .json({ message: "final_turn_processed", isLast: true });
     }
-    return res.status(200).json({ message: "data accepted", isLast: false, completed: generalInfo.completed });
-});
-
-app.get("/imgs/:name", (req, res) => {
-    const name = req.params.name;
-    if (existsSync(__dirname + `/imgs/${name}`)) {
-        res.sendFile(__dirname + `/imgs/${name}`);
-    }
-    res.sendFile(__dirname + `/imgs/NotFound.png`);
+    return res.status(200).json({ message: "data accepted", isLast: false, completed: generalInfo.completed, round: generalInfo.round });
 });
 
 app.post("/transfer", (req, res) => {

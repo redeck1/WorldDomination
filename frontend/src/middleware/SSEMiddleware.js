@@ -1,5 +1,5 @@
 import { fetchCountriesData, setCountries } from "../features/countriesSlice";
-import { setLogs } from "../features/logsSlice";
+import { setLogs, fetchLogs } from "../features/logsSlice";
 import { setOwnCountry } from "../features/ownCountrySlice";
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -45,6 +45,7 @@ export const gameSseMiddleware = (store) => {
                 }
                 connect(action.payload.name);
                 store.dispatch(fetchCountriesData());
+                store.dispatch(fetchLogs());
                 break;
 
             case "logout/fulfilled":
