@@ -117,7 +117,11 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.static(__dirname + "/imgs"));
-
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 app.use("/", (req, res, next) => {
     res.on("finish", () => {
         const now = new Date();
@@ -150,7 +154,8 @@ app.get("/game-update", (req, res) => {
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
-        Connection: "keep-alive",
+        'Connection': "keep-alive",
+        'X-Accel-Buffering': 'no'
     });
 
     clients[countryName] = res;
